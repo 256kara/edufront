@@ -1,37 +1,160 @@
 @import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap");
-
 /* @import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap"); */
 
 html,
 body,
-#root,
-.app,
-.content {
-  height: 100%;
+#root {
+  height: 100vh;
   width: 100%;
+  margin: 0;
+  overflow: hidden;
   font-family: "Source Sans Pro", sans-serif;
 }
 
-.app {
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.app-shell {
   display: flex;
-  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.sidebar-pane {
+  flex-shrink: 0;
+  z-index: 30;
+}
+
+.content-pane {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.topbar-pane {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.login-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+  background: linear-gradient(135deg, #edf4ff 0%, #f6fafc 100%);
+}
+
+.login-visual {
+  padding: 48px;
+  margin: 24px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-illustration {
+  width: 100%;
+  max-width: 560px;
+  height: auto;
+  align-self: center;
+}
+
+.login-card {
+  width: min(460px, calc(100% - 40px));
+  margin: auto;
+  padding: 32px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 18px 50px rgba(27, 39, 51, 0.14);
+  backdrop-filter: blur(8px);
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: #555;
+}
+
+.page-scroll-area {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 12px 16px;
 }
 
 ::-webkit-scrollbar {
   width: 10px;
 }
 
-/* Track */
 ::-webkit-scrollbar-track {
   background: #e0e0e0;
 }
 
-/* Handle */
 ::-webkit-scrollbar-thumb {
   background: #888;
+  border-radius: 8px;
 }
 
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+.student-form {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 900px) {
+  .sidebar-pane.sidebar-mobile {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+  }
+
+  .sidebar-pane.sidebar-mobile.sidebar-open {
+    transform: translateX(0);
+  }
+
+  .sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    border: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 20;
+    cursor: pointer;
+  }
+
+  .topbar-pane {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .page-scroll-area {
+    padding: 0 8px 12px;
+  }
+
+  .login-page {
+    grid-template-columns: 1fr;
+    padding: 20px 0;
+  }
+
+  .login-card {
+    width: calc(100% - 32px);
+    padding: 24px;
+    color: #333;
+  }
 }
