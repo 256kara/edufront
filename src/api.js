@@ -1,4 +1,5 @@
 import axios from "axios";
+import NetworkError from "./components/Networkerror";
 
 export const AUTH_TOKEN_KEY = "edupulse_token";
 const API_BASE_URL = "http://localhost:5000";
@@ -21,7 +22,9 @@ apiClient.interceptors.request.use((config) => {
 
 apiClient.interceptors.response.use(
   (response) => response,
-  (error) => Promise.reject(error),
+  (error) => {
+    return Promise.reject(error);
+  },
 );
 
 export const apiRequest = {

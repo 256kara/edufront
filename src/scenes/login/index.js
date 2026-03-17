@@ -42,28 +42,28 @@ export default function Login({ isMobile, onLogin }) {
       },
     },
     "& .MuiInputBase-input::placeholder": {
-      color: colors.primary[500],
+      color: colors.greenAccent[500],
     },
     "& .MuiInputBase-input": {
-      color: colors.primary[500],
+      color: colors.greenAccent[500],
     },
     "& .MuiInputBase-root": {
       color: colors.greenAccent[500],
     },
     "& .MuiInputLabel-root": {
-      color: colors.primary[500],
+      color: colors.greenAccent[500],
     },
     "& .MuiInputLabel-outlined": {
-      color: colors.primary[500],
+      color: colors.greenAccent[500],
     },
     "& .MuiInputLabel-outlined.Mui-focused": {
-      color: colors.primary[500],
+      color: colors.greenAccent[500],
     },
     "& .MuiInputLabel-outlined.MuiInputLabel-shrink": {
-      color: colors.primary[500],
+      color: colors.greenAccent[500],
     },
     "& .MuiInputLabel-outlined.MuiInputLabel-shrink.Mui-focused": {
-      color: colors.primary[500],
+      color: colors.greenAccent[500],
       opacity: 1,
     },
   };

@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useContext } from "react";
 import { ColorModeContext, useMode } from "./theme";
 import {
   CssBaseline,
   ThemeProvider,
   useMediaQuery,
   Typography,
+  Box,
 } from "@mui/material";
 import { Routes, Route } from "react-router-dom";
 import Topbar from "./scenes/global/Topbar";
@@ -28,6 +30,8 @@ import Login from "./scenes/login";
 import { AUTH_TOKEN_KEY } from "./api";
 // import Calendar from "./scenes/calendar";
 import { apiRequest } from "./api";
+import { AuthContext } from "./context/AuthContext";
+import capusername from "./components/Capitalize";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -37,15 +41,16 @@ function App() {
     Boolean(localStorage.getItem(AUTH_TOKEN_KEY)),
   );
 
-  // create user context and provider to manage auth state across the app
-  const [user, setUser] = useState(null);
+  const { setUser } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   async function fetchCurrentUser() {
     const token = localStorage.getItem(AUTH_TOKEN_KEY);
     if (token) {
-      const response = await apiRequest
+      await apiRequest
         .post("/api/auth/validate-token", { token })
         .then((response) => {
           setUser(response.data.user);
@@ -62,7 +67,7 @@ function App() {
   }
   useEffect(() => {
     fetchCurrentUser();
-  }, []);
+  }, [user?.name]);
 
   useEffect(() => {
     if (!isMobile) {
@@ -121,15 +126,39 @@ function App() {
                   onLogout={handleLogout}
                 />
                 {isLoggedIn && (
-                  <Typography variant="h4" sx={{ ml: 2, mt: 1 }}>
-                    {isLoading ? (
-                      "Loading user..."
-                    ) : (
-                      <>
-                        Welcome, {user.name || "Admin"}, {user.role}{" "}
-                      </>
-                    )}
-                  </Typography>
+                  <Box display="flex" justifyContent="space-between">
+                    <Typography variant="h4" sx={{ ml: 2, mb: 1 }}>
+                      {isLoading ? (
+                        "Loading user..."
+                      ) : (
+                        <>Welcome, {capusername(user.name) || "Admin"}</>
+                      )}
+                    </Typography>
+                    <Typography
+                      variant="h4"
+                      sx={{
+                        mr: 2,
+                        mb: 1,
+                        color: "text.primary",
+                        backgroundColor: "background.paper",
+                        padding: "4px 12px",
+                        borderRadius: "4px",
+                        fontWeight: "bold",
+                        textTransform: "capitalize",
+                      }}
+                    >
+                      {isLoading ? (
+                        "Loading user..."
+                      ) : (
+                        <>
+                          {user.role === "super-admin" && "Admin"}
+                          {user.role === "admin" && "Admin"}
+                          {user.role === "teacher" && "Teacher"}
+                          {user.role === "student" && "Student"}
+                        </>
+                      )}
+                    </Typography>
+                  </Box>
                 )}
               </header>
               <section className="page-scroll-area">
