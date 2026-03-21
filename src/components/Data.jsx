@@ -43,17 +43,18 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
   const [editMode, setEditMode] = useState(false);
   const [editedStudent, setEditedStudent] = useState({});
 
-  useEffect(() => {
-    fetchStudents();
-  }, [page, { search }, { classFilter }, refresh]);
+  // useEffect(() => {
+  //   fetchStudents();
+  // }, [page, { search }, { classFilter }, refresh]);
 
-  const fetchStudents = async () => {
-    const res = await apiRequest.get(
-      `http://localhost:5000/api/admin/students/${user?.school_name}?page=${page}&search=${search}&class=${classFilter}`,
-    );
+  // const fetchStudents = async () => {
+  //   if (!user?.school_name) return;
+  //   const res = await apiRequest.get(
+  //     `http://localhost:5000/api/admin/students/${user?.school_name}?page=${page}&search=${search}&class=${classFilter}`,
+  //   );
 
-    setStudents(res.data.students);
-  };
+  //   setStudents(res.data.students);
+  // };
 
   const deleteStudent = async (id) => {
     try {
@@ -127,8 +128,19 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
     const exportData = students?.map((student) => ({
       "ADMISSION NO": student.admissionNumber,
       NAME: capusername(student.name),
-      CLASS: capusername(student.class),
+      CLASS: capusername(student.classLevel),
+      STREAM: capusername(student.stream),
       GENDER: capusername(student.gender),
+      PHONE: student.phone || "",
+      EMAIL: student.email || "",
+      NIN: student.nin || "",
+      COMBINATION: capusername(student.combination),
+      ADDRESS: student.address || "",
+      "HEALTH STATUS": capusername(student.healthStatus),
+      "EMERGENCY CONTACT": student.emergencyContact || "",
+      USERNAME: student.username || "",
+      LIN: student.lin || "",
+      PASSWORD: "defaultpassword123", // Default password for bulk import
     }));
     const worksheet = XLSX.utils.json_to_sheet(exportData);
     const workbook = XLSX.utils.book_new();
@@ -190,6 +202,69 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
       hide: true,
     },
     {
+      field: "phone",
+      headerName: "Phone",
+      minWidth: isMobile ? 60 : 80,
+      flex: isMobile ? 0.8 : 0.8,
+      hide: true, // Hide phone on mobile
+    },
+    {
+      field: "email",
+      headerName: "Email",
+      minWidth: isMobile ? 100 : 150,
+      flex: isMobile ? 2 : 2,
+      hide: true,
+    },
+    {
+      field: "nin",
+      headerName: "NIN",
+      minWidth: isMobile ? 60 : 80,
+      flex: isMobile ? 0.8 : 0.8,
+      hide: true,
+    },
+    {
+      field: "combination",
+      headerName: "Combination",
+      minWidth: isMobile ? 80 : 120,
+      flex: isMobile ? 0.8 : 1.0,
+      hide: true,
+    },
+    {
+      field: "address",
+      headerName: "Address",
+      minWidth: isMobile ? 100 : 150,
+      flex: isMobile ? 2 : 2,
+      hide: true,
+    },
+    {
+      field: "healthStatus",
+      headerName: "Health Status",
+      minWidth: isMobile ? 100 : 150,
+      flex: isMobile ? 2 : 2,
+      hide: true,
+    },
+    {
+      field: "emergencyContact",
+      headerName: "Emergency Contact",
+      minWidth: isMobile ? 100 : 150,
+      flex: isMobile ? 2 : 2,
+      hide: true,
+    },
+    {
+      field: "username",
+      headerName: "Username",
+      minWidth: isMobile ? 80 : 120,
+      flex: isMobile ? 0.8 : 1.0,
+      hide: true,
+    },
+    {
+      field: "lin",
+      headerName: "LIN",
+      minWidth: isMobile ? 80 : 120,
+      flex: isMobile ? 0.8 : 1.0,
+      hide: true,
+    },
+    {
       field: "actions",
       headerName: "Action",
       minWidth: isMobile ? 80 : 120,
@@ -198,9 +273,7 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
       renderCell: (params) => (
         <Box display="flex" justifyContent="center" width="100%" gap={0.2}>
           <IconButton
-            onClick={() =>
-              handleViewProfile(params.row.userId, params.row.name)
-            }
+            onClick={() => handleViewProfile(params.row)}
             size="small"
             sx={{
               color:
@@ -254,6 +327,15 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
       gender: capusername(student.gender),
       status: capusername(student.status),
       userId: student.userId,
+      phone: student.phone,
+      email: student.email,
+      nin: student.nin,
+      combination: student.combination,
+      address: student.address,
+      healthStatus: student.healthStatus,
+      emergencyContact: student.emergencyContact,
+      username: student.username,
+      lin: student.lin,
     })) || [];
 
   return (
@@ -556,6 +638,21 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
                 <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
+                    label="Phone Number"
+                    value={
+                      editMode
+                        ? editedStudent.phone || ""
+                        : selectedStudent.phone || ""
+                    }
+                    onChange={(e) => handleInputChange("phone", e.target.value)}
+                    InputProps={{ readOnly: !editMode }}
+                    variant={editMode ? "outlined" : "filled"}
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
                     label="Status"
                     value={
                       editMode
@@ -564,6 +661,149 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
                     }
                     onChange={(e) =>
                       handleInputChange("status", e.target.value)
+                    }
+                    InputProps={{ readOnly: !editMode }}
+                    variant={editMode ? "outlined" : "filled"}
+                  />
+                </Grid>
+
+                {/* Additional Information */}
+                <Grid item xs={12}>
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    color="primary"
+                    sx={{ mt: 2 }}
+                  >
+                    Additional Information
+                  </Typography>
+                  <Divider sx={{ mb: 2 }} />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="National ID (NIN)"
+                    value={
+                      editMode
+                        ? editedStudent.nin || ""
+                        : selectedStudent.nin || ""
+                    }
+                    onChange={(e) => handleInputChange("nin", e.target.value)}
+                    InputProps={{ readOnly: !editMode }}
+                    variant={editMode ? "outlined" : "filled"}
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Subject Combination"
+                    value={
+                      editMode
+                        ? editedStudent.combination || ""
+                        : selectedStudent.combination || ""
+                    }
+                    onChange={(e) =>
+                      handleInputChange("combination", e.target.value)
+                    }
+                    InputProps={{ readOnly: !editMode }}
+                    variant={editMode ? "outlined" : "filled"}
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Username"
+                    value={
+                      editMode
+                        ? editedStudent.username || ""
+                        : selectedStudent.username || ""
+                    }
+                    onChange={(e) =>
+                      handleInputChange("username", e.target.value)
+                    }
+                    InputProps={{ readOnly: !editMode }}
+                    variant={editMode ? "outlined" : "filled"}
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="LIN"
+                    value={
+                      editMode
+                        ? editedStudent.lin || ""
+                        : selectedStudent.lin || ""
+                    }
+                    onChange={(e) => handleInputChange("lin", e.target.value)}
+                    InputProps={{ readOnly: !editMode }}
+                    variant={editMode ? "outlined" : "filled"}
+                  />
+                </Grid>
+
+                {/* Health & Emergency Information */}
+                <Grid item xs={12}>
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    color="primary"
+                    sx={{ mt: 2 }}
+                  >
+                    Health & Emergency Information
+                  </Typography>
+                  <Divider sx={{ mb: 2 }} />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Health Status"
+                    value={
+                      editMode
+                        ? editedStudent.healthStatus || ""
+                        : selectedStudent.healthStatus || ""
+                    }
+                    onChange={(e) =>
+                      handleInputChange("healthStatus", e.target.value)
+                    }
+                    InputProps={{ readOnly: !editMode }}
+                    variant={editMode ? "outlined" : "filled"}
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Emergency Contact"
+                    value={
+                      editMode
+                        ? editedStudent.emergencyContact || ""
+                        : selectedStudent.emergencyContact || ""
+                    }
+                    onChange={(e) =>
+                      handleInputChange("emergencyContact", e.target.value)
+                    }
+                    InputProps={{ readOnly: !editMode }}
+                    variant={editMode ? "outlined" : "filled"}
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Address"
+                    multiline
+                    rows={3}
+                    value={
+                      editMode
+                        ? editedStudent.address || ""
+                        : selectedStudent.address || ""
+                    }
+                    onChange={(e) =>
+                      handleInputChange("address", e.target.value)
                     }
                     InputProps={{ readOnly: !editMode }}
                     variant={editMode ? "outlined" : "filled"}

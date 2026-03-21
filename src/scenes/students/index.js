@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useContext, useState } from "react";
+import * as XLSX from "xlsx";
 import {
   Box,
   InputBase,
@@ -42,6 +43,15 @@ const Students = () => {
     classLevel: "",
     phone: "",
     school_name: user?.school_name,
+    admissionNumber: "",
+    stream: "",
+    combination: "",
+    nin: "",
+    address: "",
+    healthStatus: "",
+    emergencyContact: "",
+    username: "",
+    lin: "",
   });
   const [openSuccess, setOpenSuccess] = React.useState(false);
   const [search, setSearch] = useState("");
@@ -76,6 +86,15 @@ const Students = () => {
       classLevel: "",
       phone: "",
       school_name: user?.school_name,
+      admissionNumber: "",
+      stream: "",
+      combination: "",
+      nin: "",
+      address: "",
+      healthStatus: "",
+      emergencyContact: "",
+      username: "",
+      lin: "",
     });
   };
 
@@ -98,26 +117,94 @@ const Students = () => {
     }
   };
 
+  const downloadTemplate = () => {
+    // Create a sample template with all required fields
+    const templateData = [
+      {
+        "ADMISSION NO": "ADM001",
+        NAME: "John Doe",
+        CLASS: "S1",
+        STREAM: "SCI",
+        GENDER: "male",
+        PHONE: "+256700000000",
+        EMAIL: "john.doe@school.com",
+        NIN: "CM123456789ABC",
+        COMBINATION: "PCM",
+        ADDRESS: "123 Main Street, Kampala",
+        "HEALTH STATUS": "Healthy",
+        "EMERGENCY CONTACT": "+256711111111",
+        USERNAME: "johndoe",
+        LIN: "Kmss",
+        PASSWORD: "defaultpassword123",
+      },
+      {
+        "ADMISSION NO": "ADM002",
+        NAME: "Jane Smith",
+        CLASS: "S2",
+        STREAM: "ARTS",
+        GENDER: "female",
+        PHONE: "+256722222222",
+        EMAIL: "jane.smith@school.com",
+        NIN: "CF987654321XYZ",
+        COMBINATION: "BCM",
+        ADDRESS: "456 Oak Avenue, Entebbe",
+        "HEALTH STATUS": "Healthy",
+        "EMERGENCY CONTACT": "+256733333333",
+        USERNAME: "janesmith",
+        LIN: "Kmss",
+        PASSWORD: "defaultpassword123",
+      },
+    ];
+
+    const worksheet = XLSX.utils.json_to_sheet(templateData);
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Student_Template");
+
+    XLSX.writeFile(workbook, "student_import_template.xlsx");
+  };
+
   const uploadMultipleFiles = async (selectedFiles) => {
     if (selectedFiles.length === 0) return;
 
     setIsUploading(true);
-    let successCount = 0;
-    let errorCount = 0;
+    let totalSuccess = 0;
+    let totalFailed = 0;
+    let allErrors = [];
 
     for (const file of selectedFiles) {
       const formData = new FormData();
       formData.append("file", file);
+      formData.append("school_name", user?.school_name);
 
       try {
-        await apiRequest.post("/api/bulk/students/import", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
+        const response = await apiRequest.post(
+          "/api/bulk/students/import",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
           },
-        });
-        successCount++;
+        );
+
+        if (response.data.results) {
+          totalSuccess += response.data.results.success;
+          totalFailed += response.data.results.failed;
+          if (
+            response.data.results.errors &&
+            response.data.results.errors.length > 0
+          ) {
+            allErrors.push(...response.data.results.errors);
+          }
+        } else {
+          totalSuccess += 1; // For backward compatibility
+        }
       } catch (error) {
-        errorCount++;
+        totalFailed++;
+        const errorMessage =
+          error.response?.data?.message || `Failed to upload ${file.name}`;
+        allErrors.push(errorMessage);
         console.error(`Failed to upload ${file.name}:`, error);
       }
     }
@@ -126,10 +213,14 @@ const Students = () => {
     setFiles([]);
     setIsUploading(false);
 
-    if (errorCount === 0) {
-      setOpenSuccess(`${successCount} file(s) uploaded successfully!`);
+    if (totalFailed === 0) {
+      setOpenSuccess(`${totalSuccess} student(s) imported successfully!`);
+    } else if (totalSuccess === 0) {
+      setError(`Bulk import failed: ${allErrors.join(", ")}`);
     } else {
-      setOpenSuccess(`${successCount} file(s) uploaded, ${errorCount} failed.`);
+      setOpenSuccess(
+        `${totalSuccess} student(s) imported, ${totalFailed} failed. ${allErrors.length > 0 ? "Check console for details." : ""}`,
+      );
     }
   };
 
@@ -186,6 +277,15 @@ const Students = () => {
           </Typography>
           <Typography variant="h6" color="text.secondary">
             Manage your Students.
+          </Typography>
+        </Box>
+        <Box sx={{ textAlign: "right", maxWidth: "300px" }}>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+            <strong>Bulk Import:</strong> Download template, fill with student
+            data, then upload Excel file.
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            Required fields: Admission No, Name, Email, Username
           </Typography>
         </Box>
       </Box>
@@ -284,6 +384,135 @@ const Students = () => {
                 <MenuItem value="S6">S6</MenuItem>
               </Select>
             </FormControl>
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <TextField
+                name="admissionNumber"
+                label="Admission Number"
+                variant="filled"
+                value={studentData.admissionNumber}
+                onChange={handleChange}
+                sx={{ color: colors.blueAccent[300] }}
+                onFocus={() => setError("")}
+              />
+            </FormControl>
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <InputLabel id="stream-id">Stream</InputLabel>
+              <Select
+                labelId="stream-id"
+                name="stream"
+                value={studentData.stream}
+                onChange={handleChange}
+                input={<OutlinedInput label="Stream" />}
+                sx={{ color: colors.blueAccent[300] }}
+                onFocus={() => setError("")}
+              >
+                <MenuItem value="SCI">SCI</MenuItem>
+                <MenuItem value="ARTS">ARTS</MenuItem>
+                <MenuItem value="N">N</MenuItem>
+                <MenuItem value="E">E</MenuItem>
+                <MenuItem value="S">S</MenuItem>
+                <MenuItem value="W">W</MenuItem>
+                <MenuItem value="NE">NE</MenuItem>
+                <MenuItem value="NW">NW</MenuItem>
+                <MenuItem value="SE">SE</MenuItem>
+                <MenuItem value="SW">SW</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <InputLabel id="combination-id">Combination</InputLabel>
+              <Select
+                labelId="combination-id"
+                name="combination"
+                value={studentData.combination}
+                onChange={handleChange}
+                input={<OutlinedInput label="Combination" />}
+                sx={{ color: colors.blueAccent[300] }}
+                onFocus={() => setError("")}
+              >
+                <MenuItem value="PCM">PCM</MenuItem>
+                <MenuItem value="PCB">PCB</MenuItem>
+                <MenuItem value="BCM">BCM</MenuItem>
+                <MenuItem value="BCFN">BCFN</MenuItem>
+                <MenuItem value="N/A">N/A</MenuItem>
+                <MenuItem value="MEE">MEE</MenuItem>
+                <MenuItem value="MEA">MEA</MenuItem>
+                <MenuItem value="HELL">HELL</MenuItem>
+                <MenuItem value="MAT">MAT</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <TextField
+                name="nin"
+                label="NIN"
+                variant="filled"
+                value={studentData.nin}
+                onChange={handleChange}
+                sx={{
+                  color: colors.blueAccent[300],
+                }}
+                onFocus={() => setError("")}
+              />
+            </FormControl>
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <TextField
+                name="address"
+                label="Address"
+                variant="filled"
+                value={studentData.address}
+                onChange={handleChange}
+                sx={{ color: colors.blueAccent[300] }}
+                onFocus={() => setError("")}
+              />
+            </FormControl>
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <InputLabel id="healthStatus-id">Health Status</InputLabel>
+              <Select
+                labelId="healthStatus-id"
+                name="healthStatus"
+                value={studentData.healthStatus}
+                onChange={handleChange}
+                input={<OutlinedInput label="Health Status" />}
+                sx={{ color: colors.blueAccent[300] }}
+                onFocus={() => setError("")}
+              >
+                <MenuItem value="Sick">Sick</MenuItem>
+                <MenuItem value="N/A">N/A</MenuItem>
+                <MenuItem value="Healthy">Healthy</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <TextField
+                name="emergencyContact"
+                label="Emergency Contact"
+                variant="filled"
+                value={studentData.emergencyContact}
+                onChange={handleChange}
+                sx={{ color: colors.blueAccent[300] }}
+                onFocus={() => setError("")}
+              />
+            </FormControl>
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <TextField
+                name="username"
+                label="Username"
+                variant="filled"
+                value={studentData.username}
+                onChange={handleChange}
+                sx={{ color: colors.blueAccent[300] }}
+                onFocus={() => setError("")}
+              />
+            </FormControl>
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <TextField
+                name="lin"
+                label="LIN"
+                variant="filled"
+                value={studentData.lin}
+                onChange={handleChange}
+                sx={{ color: colors.blueAccent[300] }}
+                onFocus={() => setError("")}
+              />
+            </FormControl>
           </Box>
         </DialogContent>
         <DialogActions>
@@ -335,6 +564,15 @@ const Students = () => {
             color={theme.palette.mode === "dark" ? "secondary" : "primary"}
           >
             Add Student
+          </Button>
+
+          <Button
+            sx={{ p: 1 }}
+            onClick={downloadTemplate}
+            variant="outlined"
+            color={theme.palette.mode === "dark" ? "secondary" : "primary"}
+          >
+            Download Template
           </Button>
 
           {/* Single upload button for multiple files */}

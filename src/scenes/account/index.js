@@ -57,6 +57,10 @@ const Account = () => {
   const { user } = useContext(AuthContext);
   const colorMode = useContext(ColorModeContext);
 
+  const displayName = user?.name?.trim() || "Super Admin";
+  const displayRole = user?.role || "super-admin";
+  const avatarInitial = (displayName.charAt(0) || "S").toUpperCase();
+
   // State for different sections
   const [activeTab, setActiveTab] = useState(0);
   const [editMode, setEditMode] = useState(false);
@@ -69,9 +73,22 @@ const Account = () => {
     email: user?.email || "admin@school.com",
     phone: user?.phone || "+1234567890",
     schoolName: user?.school_name || "Sample School",
-    role: user?.role,
+    role: user?.role || "super-admin",
     joinDate: "2026-02-15",
   });
+
+  useEffect(() => {
+    if (!user) return;
+
+    setProfileData((prev) => ({
+      ...prev,
+      name: user.name ?? prev.name,
+      email: user.email ?? prev.email,
+      phone: user.phone ?? prev.phone,
+      schoolName: user.school_name ?? prev.schoolName,
+      role: user.role ?? prev.role,
+    }));
+  }, [user]);
 
   // Password change
   const [passwordData, setPasswordData] = useState({
@@ -237,7 +254,7 @@ const Account = () => {
                     : "0 4px 12px rgba(0,0,0,0.15)",
               }}
             >
-              {user?.name.charAt(0).toUpperCase()}
+              {avatarInitial}
             </Avatar>
             <Box flex={1} minWidth={0}>
               <Typography
@@ -251,7 +268,7 @@ const Account = () => {
                   whiteSpace: "nowrap",
                 }}
               >
-                {capusername(user.name) || "Super Admin"}
+                {capusername(displayName)}
               </Typography>
               <Typography
                 variant={isMobile ? "body1" : "h6"}
@@ -261,11 +278,10 @@ const Account = () => {
                   fontWeight: 400,
                 }}
               >
-                {/* {user?.role} */}
-                {user.role === "super-admin" && "Super Admin"}
-                {user.role === "admin" && "Admin"}
-                {user.role === "teacher" && "Teacher"}
-                {user.role === "student" && "Student"}
+                {displayRole === "super-admin" && "Super Admin"}
+                {displayRole === "admin" && "Admin"}
+                {displayRole === "teacher" && "Teacher"}
+                {displayRole === "student" && "Student"}
               </Typography>
               <Typography
                 variant="body2"

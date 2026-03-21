@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useCallback } from "react";
 import {
   Alert,
   Box,
@@ -8,9 +8,29 @@ import {
   TextField,
   Typography,
   useTheme,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import { tokens } from "../../theme";
 import { apiRequest } from "../../api";
+
+// Email validation regex
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Error dialog component
+const ErrorDialog = ({ open, title, message, onClose }) => (
+  <Dialog open={open} onClose={onClose}>
+    <DialogTitle>{title}</DialogTitle>
+    <DialogContent>{message}</DialogContent>
+    <DialogActions>
+      <Button onClick={onClose} variant="contained">
+        OK
+      </Button>
+    </DialogActions>
+  </Dialog>
+);
 
 export default function Login({ isMobile, onLogin }) {
   const theme = useTheme();
@@ -24,6 +44,12 @@ export default function Login({ isMobile, onLogin }) {
   });
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState({});
+  const [errorDialog, setErrorDialog] = useState({
+    open: false,
+    title: "",
+    message: "",
+  });
 
   const textFieldSx = {
     input: {
@@ -72,22 +98,113 @@ export default function Login({ isMobile, onLogin }) {
     return (
       formValues.username.trim() &&
       formValues.email.trim() &&
-      formValues.password.trim()
+      EMAIL_REGEX.test(formValues.email.trim()) &&
+      formValues.password.trim() &&
+      formValues.school_name.trim()
     );
   }, [formValues]);
 
+  const validateField = useCallback(
+    (name, value) => {
+      const errors = { ...fieldErrors };
+
+      switch (name) {
+        case "email":
+          if (!value.trim()) {
+            errors.email = "Email is required";
+          } else if (!EMAIL_REGEX.test(value.trim())) {
+            errors.email = "Please enter a valid email address";
+          } else {
+            delete errors.email;
+          }
+          break;
+        case "username":
+          if (!value.trim()) {
+            errors.username = "Username is required";
+          } else if (value.trim().length < 2) {
+            errors.username = "Username must be at least 2 characters";
+          } else {
+            delete errors.username;
+          }
+          break;
+        case "password":
+          if (!value.trim()) {
+            errors.password = "Password is required";
+          } else if (value.trim().length < 4) {
+            errors.password = "Password must be at least 4 characters";
+          } else {
+            delete errors.password;
+          }
+          break;
+        case "school_name":
+          if (!value.trim()) {
+            errors.school_name = "School name is required";
+          } else {
+            delete errors.school_name;
+          }
+          break;
+        default:
+          break;
+      }
+
+      setFieldErrors(errors);
+      return Object.keys(errors).length === 0;
+    },
+    [fieldErrors],
+  );
+
   const handleChange = (event) => {
     const { name, value, checked, type } = event.target;
+    const newValue = type === "checkbox" ? checked : value;
+
     setFormValues((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: newValue,
     }));
+
+    // Validate field as user types (only for email)
+    if (name === "email" && value.trim()) {
+      validateField(name, value);
+    }
+  };
+
+  const handleBlur = (event) => {
+    const { name, value } = event.target;
+    if (name && value.trim()) {
+      validateField(name, value);
+    }
+  };
+
+  const showErrorDialog = (title, message) => {
+    setErrorDialog({
+      open: true,
+      title,
+      message,
+    });
+  };
+
+  const closeErrorDialog = () => {
+    setErrorDialog({ open: false, title: "", message: "" });
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!isFormValid) {
-      setError("Please fill in username, email and password.");
+
+    // Validate all fields
+    const validation = {
+      username: validateField("username", formValues.username),
+      email: validateField("email", formValues.email),
+      password: validateField("password", formValues.password),
+      school_name: validateField("school_name", formValues.school_name),
+    };
+
+    const hasErrors = !Object.values(validation).every((v) => v);
+
+    if (hasErrors) {
+      showErrorDialog(
+        "Validation Error",
+        "Please fix the errors in the form before submitting.",
+      );
       return;
     }
 
@@ -97,7 +214,7 @@ export default function Login({ isMobile, onLogin }) {
     try {
       const payload = {
         name: formValues.username.trim(),
-        email: formValues.email.trim(),
+        email: formValues.email.trim().toLowerCase(),
         password: formValues.password,
         school_name: formValues.school_name.trim(),
       };
@@ -109,16 +226,26 @@ export default function Login({ isMobile, onLogin }) {
         response?.data?.data?.token;
 
       if (!token) {
-        throw new Error("Token missing from login response.");
+        showErrorDialog(
+          "Login Error",
+          "Token missing from server response. Please try again.",
+        );
+        return;
       }
 
       onLogin?.(token);
     } catch (submitError) {
-      const apiMessage =
-        submitError?.response?.data?.message ||
-        submitError?.response?.data?.error;
+      let errorMessage = "Login failed. Please check your credentials.";
 
-      setError(apiMessage || "Check your fields and try again.");
+      if (submitError.response?.data?.error) {
+        errorMessage = submitError.response.data.error;
+      } else if (submitError.response?.data?.message) {
+        errorMessage = submitError.response.data.message;
+      } else if (submitError.message) {
+        errorMessage = submitError.message;
+      }
+
+      showErrorDialog("Login Failed", errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -167,9 +294,12 @@ export default function Login({ isMobile, onLogin }) {
             name="username"
             value={formValues.username}
             onChange={handleChange}
+            onBlur={handleBlur}
             fullWidth
             required
             variant="outlined"
+            error={!!fieldErrors.username}
+            helperText={fieldErrors.username}
             sx={textFieldSx}
           />
           <TextField
@@ -178,8 +308,12 @@ export default function Login({ isMobile, onLogin }) {
             type="email"
             value={formValues.email}
             onChange={handleChange}
+            onBlur={handleBlur}
             fullWidth
             required
+            variant="outlined"
+            error={!!fieldErrors.email}
+            helperText={fieldErrors.email}
             sx={textFieldSx}
           />
           <TextField
@@ -188,8 +322,12 @@ export default function Login({ isMobile, onLogin }) {
             type="password"
             value={formValues.password}
             onChange={handleChange}
+            onBlur={handleBlur}
             fullWidth
             required
+            variant="outlined"
+            error={!!fieldErrors.password}
+            helperText={fieldErrors.password}
             sx={textFieldSx}
           />
           <TextField
@@ -197,8 +335,12 @@ export default function Login({ isMobile, onLogin }) {
             name="school_name"
             value={formValues.school_name}
             onChange={handleChange}
+            onBlur={handleBlur}
             fullWidth
             required
+            variant="outlined"
+            error={!!fieldErrors.school_name}
+            helperText={fieldErrors.school_name}
             sx={textFieldSx}
           />
           <FormControlLabel
@@ -232,6 +374,13 @@ export default function Login({ isMobile, onLogin }) {
             {isSubmitting ? "Signing In..." : "Log In"}
           </Button>
         </form>
+
+        <ErrorDialog
+          open={errorDialog.open}
+          title={errorDialog.title}
+          message={errorDialog.message}
+          onClose={closeErrorDialog}
+        />
       </Box>
     </Box>
   );
