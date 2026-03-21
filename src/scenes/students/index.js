@@ -253,14 +253,14 @@ const Students = () => {
       {/* error */}
       {error && (
         <Box>
-          <Alert severity="info" sx={{ mt: 2, mb: 2 }}>
+          <Alert severity="info" sx={{ color: colors.blueAccent[300] }}}>
             {error}
           </Alert>
         </Box>
       )}
       {openSuccess && (
-        <Box sx={{ position: "absolute", mt: 2, width: "30%", zIndex: "1" }}>
-          <Alert severity="success" sx={{ mt: 2, mb: 2 }}>
+        <Box sx={{ color: colors.blueAccent[300] }}}>
+          <Alert severity="success" sx={{ color: colors.blueAccent[300] }}}>
             {openSuccess}
           </Alert>
         </Box>
@@ -279,8 +279,8 @@ const Students = () => {
             Manage your Students.
           </Typography>
         </Box>
-        <Box sx={{ textAlign: "right", maxWidth: "300px" }}>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+        <Box sx={{ color: colors.blueAccent[300] }}}>
+          <Typography variant="body2" color="text.secondary" sx={{ color: colors.blueAccent[300] }}}>
             <strong>Bulk Import:</strong> Download template, fill with student
             data, then upload Excel file.
           </Typography>
@@ -295,7 +295,7 @@ const Students = () => {
         <DialogTitle>Fill Student Data</DialogTitle>
         {error && (
           <Box>
-            <Alert severity="info" sx={{ ml: 2, mr: 2 }}>
+            <Alert severity="info" sx={{ color: colors.blueAccent[300] }}}>
               {error}
             </Alert>
           </Box>
@@ -304,76 +304,269 @@ const Students = () => {
           <Box
             className="student-form"
             component="form"
-            sx={{ display: "flex", flexWrap: "wrap" }}
+            sx={{ color: colors.blueAccent[300] }}}
           >
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <FormControl sx={{ color: colors.blueAccent[300] }}}>
               <TextField
                 name="name"
                 label="Name"
                 variant="filled"
                 value={studentData.name}
                 onChange={handleChange}
-                sx={{ color: colors.blueAccent[300] }}
+                
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    backgroundColor:
+                      colors.primary[theme.palette.mode === "dark" ? 900 : 100],
+                    color:
+                      colors.grey[theme.palette.mode === "dark" ? 100 : 900],
+                    "& fieldset": {
+                      borderColor:
+                        colors.primary[
+                          theme.palette.mode === "dark" ? 600 : 300
+                        ],
+                    },
+                    "&:hover fieldset": {
+                      borderColor:
+                        colors.greenAccent[
+                          theme.palette.mode === "dark" ? 500 : 600
+                        ],
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor:
+                        colors.greenAccent[
+                          theme.palette.mode === "dark" ? 400 : 500
+                        ],
+                    },
+                  },
+                  "& .MuiInputLabel-root": {
+                    color:
+                      colors.grey[theme.palette.mode === "dark" ? 300 : 700],
+                  },
+                }}
                 onFocus={() => setError("")}
               />
             </FormControl>
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <FormControl sx={{ color: colors.blueAccent[300] }}}>
               <TextField
                 name="phone"
                 label="Phone"
                 variant="filled"
                 value={studentData.phone}
                 onChange={handleChange}
-                sx={{ color: colors.blueAccent[300] }}
+                
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    backgroundColor:
+                      colors.primary[theme.palette.mode === "dark" ? 900 : 100],
+                    color:
+                      colors.grey[theme.palette.mode === "dark" ? 100 : 900],
+                    "& fieldset": {
+                      borderColor:
+                        colors.primary[
+                          theme.palette.mode === "dark" ? 600 : 300
+                        ],
+                    },
+                    "&:hover fieldset": {
+                      borderColor:
+                        colors.greenAccent[
+                          theme.palette.mode === "dark" ? 500 : 600
+                        ],
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor:
+                        colors.greenAccent[
+                          theme.palette.mode === "dark" ? 400 : 500
+                        ],
+                    },
+                  },
+                  "& .MuiInputLabel-root": {
+                    color:
+                      colors.grey[theme.palette.mode === "dark" ? 300 : 700],
+                  },
+                }}
                 onFocus={() => setError("")}
               />
             </FormControl>
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
-              <InputLabel id="gender-id">Gender</InputLabel>
+            <FormControl sx={{ color: colors.blueAccent[300] }}}>
+              <InputLabel
+                id="gender-id"
+                sx={{
+                  color: colors.grey[theme.palette.mode === "dark" ? 300 : 700],
+                }}
+              >
+                Gender
+              </InputLabel>
               <Select
-                sx={{ color: colors.blueAccent[300] }}
                 labelId="gender-id"
                 name="gender"
                 value={studentData.gender}
                 onChange={handleChange}
-                input={<OutlinedInput label="Gender" />}
+                input={
+                  <OutlinedInput
+                    label="Gender"
+                    sx={{
+                      backgroundColor:
+                        colors.primary[
+                          theme.palette.mode === "dark" ? 900 : 100
+                        ],
+                      color:
+                        colors.grey[theme.palette.mode === "dark" ? 100 : 900],
+                      "& fieldset": {
+                        borderColor:
+                          colors.primary[
+                            theme.palette.mode === "dark" ? 600 : 300
+                          ],
+                      },
+                      "&:hover fieldset": {
+                        borderColor:
+                          colors.greenAccent[
+                            theme.palette.mode === "dark" ? 500 : 600
+                          ],
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor:
+                          colors.greenAccent[
+                            theme.palette.mode === "dark" ? 400 : 500
+                          ],
+                      },
+                    }}
+                  />
+                }
                 onFocus={() => setError("")}
               >
                 <MenuItem value="male">Male</MenuItem>
                 <MenuItem value="female">Female</MenuItem>
               </Select>
             </FormControl>
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <FormControl sx={{ color: colors.blueAccent[300] }}}>
               <TextField
                 name="email"
                 label="Email"
                 variant="filled"
                 value={studentData.email}
                 onChange={handleChange}
-                sx={{ color: colors.blueAccent[300] }}
+                
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    backgroundColor:
+                      colors.primary[theme.palette.mode === "dark" ? 900 : 100],
+                    color:
+                      colors.grey[theme.palette.mode === "dark" ? 100 : 900],
+                    "& fieldset": {
+                      borderColor:
+                        colors.primary[
+                          theme.palette.mode === "dark" ? 600 : 300
+                        ],
+                    },
+                    "&:hover fieldset": {
+                      borderColor:
+                        colors.greenAccent[
+                          theme.palette.mode === "dark" ? 500 : 600
+                        ],
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor:
+                        colors.greenAccent[
+                          theme.palette.mode === "dark" ? 400 : 500
+                        ],
+                    },
+                  },
+                  "& .MuiInputLabel-root": {
+                    color:
+                      colors.grey[theme.palette.mode === "dark" ? 300 : 700],
+                  },
+                }}
                 onFocus={() => setError("")}
               />
             </FormControl>
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <FormControl sx={{ color: colors.blueAccent[300] }}}>
               <TextField
                 name="password"
                 label="Password"
+                type="password"
                 variant="filled"
                 value={studentData.password}
                 onChange={handleChange}
-                sx={{ color: colors.blueAccent[300] }}
+                
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    backgroundColor:
+                      colors.primary[theme.palette.mode === "dark" ? 900 : 100],
+                    color:
+                      colors.grey[theme.palette.mode === "dark" ? 100 : 900],
+                    "& fieldset": {
+                      borderColor:
+                        colors.primary[
+                          theme.palette.mode === "dark" ? 600 : 300
+                        ],
+                    },
+                    "&:hover fieldset": {
+                      borderColor:
+                        colors.greenAccent[
+                          theme.palette.mode === "dark" ? 500 : 600
+                        ],
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor:
+                        colors.greenAccent[
+                          theme.palette.mode === "dark" ? 400 : 500
+                        ],
+                    },
+                  },
+                  "& .MuiInputLabel-root": {
+                    color:
+                      colors.grey[theme.palette.mode === "dark" ? 300 : 700],
+                  },
+                }}
                 onFocus={() => setError("")}
               />
             </FormControl>{" "}
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
-              <InputLabel id="classLevel-id">Class Level</InputLabel>
+            <FormControl sx={{ color: colors.blueAccent[300] }}}>
+              <InputLabel
+                id="classLevel-id"
+                sx={{
+                  color: colors.grey[theme.palette.mode === "dark" ? 300 : 700],
+                }}
+              >
+                Class Level
+              </InputLabel>
               <Select
                 labelId="classLevel-id"
                 name="classLevel"
                 value={studentData.classLevel}
                 onChange={handleChange}
-                input={<OutlinedInput label="Class Level" />}
-                sx={{ color: colors.blueAccent[300] }}
+                input={
+                  <OutlinedInput
+                    label="Class Level"
+                    sx={{
+                      backgroundColor:
+                        colors.primary[
+                          theme.palette.mode === "dark" ? 900 : 100
+                        ],
+                      color:
+                        colors.grey[theme.palette.mode === "dark" ? 100 : 900],
+                      "& fieldset": {
+                        borderColor:
+                          colors.primary[
+                            theme.palette.mode === "dark" ? 600 : 300
+                          ],
+                      },
+                      "&:hover fieldset": {
+                        borderColor:
+                          colors.greenAccent[
+                            theme.palette.mode === "dark" ? 500 : 600
+                          ],
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor:
+                          colors.greenAccent[
+                            theme.palette.mode === "dark" ? 400 : 500
+                          ],
+                      },
+                    }}
+                  />
+                }
                 onFocus={() => setError("")}
               >
                 <MenuItem value="S1">S1</MenuItem>
@@ -384,26 +577,92 @@ const Students = () => {
                 <MenuItem value="S6">S6</MenuItem>
               </Select>
             </FormControl>
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <FormControl sx={{ color: colors.blueAccent[300] }}}>
               <TextField
                 name="admissionNumber"
                 label="Admission Number"
                 variant="filled"
                 value={studentData.admissionNumber}
                 onChange={handleChange}
-                sx={{ color: colors.blueAccent[300] }}
+                
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    backgroundColor:
+                      colors.primary[theme.palette.mode === "dark" ? 900 : 100],
+                    color:
+                      colors.grey[theme.palette.mode === "dark" ? 100 : 900],
+                    "& fieldset": {
+                      borderColor:
+                        colors.primary[
+                          theme.palette.mode === "dark" ? 600 : 300
+                        ],
+                    },
+                    "&:hover fieldset": {
+                      borderColor:
+                        colors.greenAccent[
+                          theme.palette.mode === "dark" ? 500 : 600
+                        ],
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor:
+                        colors.greenAccent[
+                          theme.palette.mode === "dark" ? 400 : 500
+                        ],
+                    },
+                  },
+                  "& .MuiInputLabel-root": {
+                    color:
+                      colors.grey[theme.palette.mode === "dark" ? 300 : 700],
+                  },
+                }}
                 onFocus={() => setError("")}
               />
             </FormControl>
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
-              <InputLabel id="stream-id">Stream</InputLabel>
+            <FormControl sx={{ color: colors.blueAccent[300] }}}>
+              <InputLabel
+                id="stream-id"
+                sx={{
+                  color: colors.grey[theme.palette.mode === "dark" ? 300 : 700],
+                }}
+              >
+                Stream
+              </InputLabel>
               <Select
                 labelId="stream-id"
                 name="stream"
                 value={studentData.stream}
                 onChange={handleChange}
-                input={<OutlinedInput label="Stream" />}
-                sx={{ color: colors.blueAccent[300] }}
+                input={
+                  <OutlinedInput
+                    label="Stream"
+                    sx={{
+                      backgroundColor:
+                        colors.primary[
+                          theme.palette.mode === "dark" ? 900 : 100
+                        ],
+                      color:
+                        colors.grey[theme.palette.mode === "dark" ? 100 : 900],
+                      "& fieldset": {
+                        borderColor:
+                          colors.primary[
+                            theme.palette.mode === "dark" ? 600 : 300
+                          ],
+                      },
+                      "&:hover fieldset": {
+                        borderColor:
+                          colors.greenAccent[
+                            theme.palette.mode === "dark" ? 500 : 600
+                          ],
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor:
+                          colors.greenAccent[
+                            theme.palette.mode === "dark" ? 400 : 500
+                          ],
+                      },
+                    }}
+                  />
+                }
                 onFocus={() => setError("")}
               >
                 <MenuItem value="SCI">SCI</MenuItem>
@@ -418,15 +677,51 @@ const Students = () => {
                 <MenuItem value="SW">SW</MenuItem>
               </Select>
             </FormControl>
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
-              <InputLabel id="combination-id">Combination</InputLabel>
+            <FormControl sx={{ color: colors.blueAccent[300] }}}>
+              <InputLabel
+                id="combination-id"
+                sx={{
+                  color: colors.grey[theme.palette.mode === "dark" ? 300 : 700],
+                }}
+              >
+                Combination
+              </InputLabel>
               <Select
                 labelId="combination-id"
                 name="combination"
                 value={studentData.combination}
                 onChange={handleChange}
-                input={<OutlinedInput label="Combination" />}
-                sx={{ color: colors.blueAccent[300] }}
+                input={
+                  <OutlinedInput
+                    label="Combination"
+                    sx={{
+                      backgroundColor:
+                        colors.primary[
+                          theme.palette.mode === "dark" ? 900 : 100
+                        ],
+                      color:
+                        colors.grey[theme.palette.mode === "dark" ? 100 : 900],
+                      "& fieldset": {
+                        borderColor:
+                          colors.primary[
+                            theme.palette.mode === "dark" ? 600 : 300
+                          ],
+                      },
+                      "&:hover fieldset": {
+                        borderColor:
+                          colors.greenAccent[
+                            theme.palette.mode === "dark" ? 500 : 600
+                          ],
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor:
+                          colors.greenAccent[
+                            theme.palette.mode === "dark" ? 400 : 500
+                          ],
+                      },
+                    }}
+                  />
+                }
                 onFocus={() => setError("")}
               >
                 <MenuItem value="PCM">PCM</MenuItem>
@@ -440,39 +735,133 @@ const Students = () => {
                 <MenuItem value="MAT">MAT</MenuItem>
               </Select>
             </FormControl>
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <FormControl sx={{ color: colors.blueAccent[300] }}}>
               <TextField
                 name="nin"
                 label="NIN"
                 variant="filled"
                 value={studentData.nin}
                 onChange={handleChange}
+                
                 sx={{
-                  color: colors.blueAccent[300],
+                  "& .MuiOutlinedInput-root": {
+                    backgroundColor:
+                      colors.primary[theme.palette.mode === "dark" ? 900 : 100],
+                    color:
+                      colors.grey[theme.palette.mode === "dark" ? 100 : 900],
+                    "& fieldset": {
+                      borderColor:
+                        colors.primary[
+                          theme.palette.mode === "dark" ? 600 : 300
+                        ],
+                    },
+                    "&:hover fieldset": {
+                      borderColor:
+                        colors.greenAccent[
+                          theme.palette.mode === "dark" ? 500 : 600
+                        ],
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor:
+                        colors.greenAccent[
+                          theme.palette.mode === "dark" ? 400 : 500
+                        ],
+                    },
+                  },
+                  "& .MuiInputLabel-root": {
+                    color:
+                      colors.grey[theme.palette.mode === "dark" ? 300 : 700],
+                  },
                 }}
                 onFocus={() => setError("")}
               />
             </FormControl>
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <FormControl sx={{ color: colors.blueAccent[300] }}}>
               <TextField
                 name="address"
                 label="Address"
                 variant="filled"
                 value={studentData.address}
                 onChange={handleChange}
-                sx={{ color: colors.blueAccent[300] }}
+                
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    backgroundColor:
+                      colors.primary[theme.palette.mode === "dark" ? 900 : 100],
+                    color:
+                      colors.grey[theme.palette.mode === "dark" ? 100 : 900],
+                    "& fieldset": {
+                      borderColor:
+                        colors.primary[
+                          theme.palette.mode === "dark" ? 600 : 300
+                        ],
+                    },
+                    "&:hover fieldset": {
+                      borderColor:
+                        colors.greenAccent[
+                          theme.palette.mode === "dark" ? 500 : 600
+                        ],
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor:
+                        colors.greenAccent[
+                          theme.palette.mode === "dark" ? 400 : 500
+                        ],
+                    },
+                  },
+                  "& .MuiInputLabel-root": {
+                    color:
+                      colors.grey[theme.palette.mode === "dark" ? 300 : 700],
+                  },
+                }}
                 onFocus={() => setError("")}
               />
             </FormControl>
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
-              <InputLabel id="healthStatus-id">Health Status</InputLabel>
+            <FormControl sx={{ color: colors.blueAccent[300] }}}>
+              <InputLabel
+                id="healthStatus-id"
+                sx={{
+                  color: colors.grey[theme.palette.mode === "dark" ? 300 : 700],
+                }}
+              >
+                Health Status
+              </InputLabel>
               <Select
                 labelId="healthStatus-id"
                 name="healthStatus"
                 value={studentData.healthStatus}
                 onChange={handleChange}
-                input={<OutlinedInput label="Health Status" />}
-                sx={{ color: colors.blueAccent[300] }}
+                input={
+                  <OutlinedInput
+                    label="Health Status"
+                    sx={{
+                      backgroundColor:
+                        colors.primary[
+                          theme.palette.mode === "dark" ? 900 : 100
+                        ],
+                      color:
+                        colors.grey[theme.palette.mode === "dark" ? 100 : 900],
+                      "& fieldset": {
+                        borderColor:
+                          colors.primary[
+                            theme.palette.mode === "dark" ? 600 : 300
+                          ],
+                      },
+                      "&:hover fieldset": {
+                        borderColor:
+                          colors.greenAccent[
+                            theme.palette.mode === "dark" ? 500 : 600
+                          ],
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor:
+                          colors.greenAccent[
+                            theme.palette.mode === "dark" ? 400 : 500
+                          ],
+                      },
+                    }}
+                  />
+                }
                 onFocus={() => setError("")}
               >
                 <MenuItem value="Sick">Sick</MenuItem>
@@ -480,36 +869,126 @@ const Students = () => {
                 <MenuItem value="Healthy">Healthy</MenuItem>
               </Select>
             </FormControl>
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <FormControl sx={{ color: colors.blueAccent[300] }}}>
               <TextField
                 name="emergencyContact"
                 label="Emergency Contact"
                 variant="filled"
                 value={studentData.emergencyContact}
                 onChange={handleChange}
-                sx={{ color: colors.blueAccent[300] }}
+                
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    backgroundColor:
+                      colors.primary[theme.palette.mode === "dark" ? 900 : 100],
+                    color:
+                      colors.grey[theme.palette.mode === "dark" ? 100 : 900],
+                    "& fieldset": {
+                      borderColor:
+                        colors.primary[
+                          theme.palette.mode === "dark" ? 600 : 300
+                        ],
+                    },
+                    "&:hover fieldset": {
+                      borderColor:
+                        colors.greenAccent[
+                          theme.palette.mode === "dark" ? 500 : 600
+                        ],
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor:
+                        colors.greenAccent[
+                          theme.palette.mode === "dark" ? 400 : 500
+                        ],
+                    },
+                  },
+                  "& .MuiInputLabel-root": {
+                    color:
+                      colors.grey[theme.palette.mode === "dark" ? 300 : 700],
+                  },
+                }}
                 onFocus={() => setError("")}
               />
             </FormControl>
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <FormControl sx={{ color: colors.blueAccent[300] }}}>
               <TextField
                 name="username"
                 label="Username"
                 variant="filled"
                 value={studentData.username}
                 onChange={handleChange}
-                sx={{ color: colors.blueAccent[300] }}
+                
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    backgroundColor:
+                      colors.primary[theme.palette.mode === "dark" ? 900 : 100],
+                    color:
+                      colors.grey[theme.palette.mode === "dark" ? 100 : 900],
+                    "& fieldset": {
+                      borderColor:
+                        colors.primary[
+                          theme.palette.mode === "dark" ? 600 : 300
+                        ],
+                    },
+                    "&:hover fieldset": {
+                      borderColor:
+                        colors.greenAccent[
+                          theme.palette.mode === "dark" ? 500 : 600
+                        ],
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor:
+                        colors.greenAccent[
+                          theme.palette.mode === "dark" ? 400 : 500
+                        ],
+                    },
+                  },
+                  "& .MuiInputLabel-root": {
+                    color:
+                      colors.grey[theme.palette.mode === "dark" ? 300 : 700],
+                  },
+                }}
                 onFocus={() => setError("")}
               />
             </FormControl>
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <FormControl sx={{ color: colors.blueAccent[300] }}}>
               <TextField
                 name="lin"
                 label="LIN"
                 variant="filled"
                 value={studentData.lin}
                 onChange={handleChange}
-                sx={{ color: colors.blueAccent[300] }}
+                
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    backgroundColor:
+                      colors.primary[theme.palette.mode === "dark" ? 900 : 100],
+                    color:
+                      colors.grey[theme.palette.mode === "dark" ? 100 : 900],
+                    "& fieldset": {
+                      borderColor:
+                        colors.primary[
+                          theme.palette.mode === "dark" ? 600 : 300
+                        ],
+                    },
+                    "&:hover fieldset": {
+                      borderColor:
+                        colors.greenAccent[
+                          theme.palette.mode === "dark" ? 500 : 600
+                        ],
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor:
+                        colors.greenAccent[
+                          theme.palette.mode === "dark" ? 400 : 500
+                        ],
+                    },
+                  },
+                  "& .MuiInputLabel-root": {
+                    color:
+                      colors.grey[theme.palette.mode === "dark" ? 300 : 700],
+                  },
+                }}
                 onFocus={() => setError("")}
               />
             </FormControl>
@@ -532,7 +1011,7 @@ const Students = () => {
           <Button
             onClick={handleSave}
             loading
-            variant="outlined"
+            variant="filled"
             loadingPosition="end"
             startIcon={<SaveIcon />}
             sx={{
@@ -558,7 +1037,7 @@ const Students = () => {
       >
         <Stack spacing={2} direction="row">
           <Button
-            sx={{ p: 1 }}
+            sx={{ color: colors.blueAccent[300] }}}
             onClick={handleClickOpen}
             variant="contained"
             color={theme.palette.mode === "dark" ? "secondary" : "primary"}
@@ -567,16 +1046,16 @@ const Students = () => {
           </Button>
 
           <Button
-            sx={{ p: 1 }}
+            sx={{ color: colors.blueAccent[300] }}}
             onClick={downloadTemplate}
-            variant="outlined"
+            variant="filled"
             color={theme.palette.mode === "dark" ? "secondary" : "primary"}
           >
             Download Template
           </Button>
 
           {/* Single upload button for multiple files */}
-          <Box sx={{ position: "relative" }}>
+          <Box sx={{ color: colors.blueAccent[300] }}}>
             <input
               type="file"
               accept=".xlsx,.xls"
@@ -589,7 +1068,7 @@ const Students = () => {
               component="label"
               htmlFor="upload-files-input"
               disabled={isUploading}
-              sx={{ p: 1 }}
+              sx={{ color: colors.blueAccent[300] }}}
               variant="contained"
               color={theme.palette.mode === "dark" ? "secondary" : "primary"}
             >
@@ -598,7 +1077,7 @@ const Students = () => {
           </Box>
 
           <Button
-            sx={{ p: 1 }}
+            sx={{ color: colors.blueAccent[300] }}}
             onClick={() => setIsexport(!isexport)}
             variant="contained"
             color={theme.palette.mode === "dark" ? "secondary" : "primary"}
@@ -611,20 +1090,20 @@ const Students = () => {
           display="flex"
           backgroundColor={colors.primary[400]}
           borderRadius="3px"
-          sx={{ width: { xs: "100%", md: "320px" } }}
+          sx={{ color: colors.blueAccent[300] }} }}
         >
           <InputBase
-            sx={{ ml: 2, flex: 1, p: 1.4 }}
+            sx={{ color: colors.blueAccent[300] }}}
             placeholder="Search student"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <IconButton type="button" sx={{ p: 1 }}>
+          <IconButton type="button" sx={{ color: colors.blueAccent[300] }}}>
             <SearchIcon />
           </IconButton>
         </Box>
-        <Box sx={{ minWidth: 120 }}>
-          <FormControl fullWidth>
+        <Box sx={{ color: colors.blueAccent[300] }}}>
+          <FormControl >
             <InputLabel id="classLevel-label">Class</InputLabel>
             <Select
               labelId="label"
