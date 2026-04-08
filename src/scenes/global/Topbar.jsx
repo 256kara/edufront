@@ -12,11 +12,11 @@ import SearchIcon from "@mui/icons-material/Search";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 
-const Topbar = ({ showMenuButton = false, onMenuClick, onLogout }) => {
+const Topbar = ({ showMenuButton = false, onMenuClick, onLogout, user }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
-
+  const isStudent = user?.role === "student";
   return (
     <Box
       display="flex"
@@ -54,17 +54,25 @@ const Topbar = ({ showMenuButton = false, onMenuClick, onLogout }) => {
           )}
         </IconButton>
 
-        <IconButton
-          component={Link}
-          to="/notifications"
-          aria-label="Notifications"
-        >
-          <NotificationsOutlinedIcon />
-        </IconButton>
+        {isStudent ? (
+          <IconButton component={Link} to="/messages" aria-label="Messages">
+            <NotificationsOutlinedIcon />
+          </IconButton>
+        ) : (
+          <IconButton
+            component={Link}
+            to="/notifications"
+            aria-label="Notifications"
+          >
+            <NotificationsOutlinedIcon />
+          </IconButton>
+        )}
 
-        <IconButton component={Link} to="/settings" aria-label="Settings">
-          <SettingsOutlinedIcon />
-        </IconButton>
+        {isStudent ? null : (
+          <IconButton component={Link} to="/settings" aria-label="Settings">
+            <SettingsOutlinedIcon />
+          </IconButton>
+        )}
 
         <IconButton component={Link} to="/account" aria-label="Account">
           <PersonOutlinedIcon />

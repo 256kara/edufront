@@ -1,4 +1,5 @@
 import { Box, Typography } from "@mui/material";
+import TeachersTable from "../../components/TeachersTable";
 
 const Teachers = () => {
   return (
@@ -13,6 +14,7 @@ const Teachers = () => {
           </Typography>
         </Box>
       </Box>
+      <TeachersTable />
     </Box>
   );
 };

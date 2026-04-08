@@ -8,7 +8,7 @@ import {
   Typography,
   Box,
 } from "@mui/material";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Topbar from "./scenes/global/Topbar";
 import Sidenav from "./scenes/global/Sidenav";
 import Dashboard from "./scenes/dashboard";
@@ -26,7 +26,9 @@ import Reports from "./scenes/reports";
 import Users from "./scenes/users";
 import Settings from "./scenes/settings";
 import Account from "./scenes/account";
+import StudentDashboard from "./scenes/studentDashboard";
 import Login from "./scenes/login";
+import Signup from "./scenes/signup";
 import { AUTH_TOKEN_KEY } from "./api";
 // import Calendar from "./scenes/calendar";
 import { apiRequest } from "./api";
@@ -67,7 +69,7 @@ function App() {
   }
   useEffect(() => {
     fetchCurrentUser();
-  }, [user?.name]);
+  }, [loggedIn]);
 
   useEffect(() => {
     if (!isMobile) {
@@ -84,14 +86,17 @@ function App() {
     return () => window.removeEventListener("storage", syncAuthState);
   }, []);
 
-  const handleLoginSuccess = (token) => {
+  const handleLoginSuccess = async (token) => {
     localStorage.setItem(AUTH_TOKEN_KEY, token);
     setLoggedIn(true);
+    // Fetch user data immediately after login
+    await fetchCurrentUser();
   };
 
   const handleLogout = () => {
     localStorage.removeItem(AUTH_TOKEN_KEY);
     setLoggedIn(false);
+    setUser(null);
   };
 
   return (
@@ -108,6 +113,7 @@ function App() {
               <Sidenav
                 isMobile={isMobile}
                 onNavigate={() => setMobileSidebarOpen(false)}
+                user={user}
               />
             </aside>
             {isMobile && mobileSidebarOpen && (
@@ -124,6 +130,7 @@ function App() {
                   showMenuButton={isMobile}
                   onMenuClick={() => setMobileSidebarOpen(true)}
                   onLogout={handleLogout}
+                  user={user}
                 />
                 {isLoggedIn && (
                   <Box display="flex" justifyContent="space-between">
@@ -131,7 +138,7 @@ function App() {
                       {isLoading ? (
                         "Loading user..."
                       ) : (
-                        <>Welcome, {capusername(user.name) || "Admin"}</>
+                        <>Welcome, {user ? capusername(user.name) : "Admin"}</>
                       )}
                     </Typography>
                     <Typography
@@ -151,10 +158,10 @@ function App() {
                         "Loading user..."
                       ) : (
                         <>
-                          {user.role === "super-admin" && "Admin"}
-                          {user.role === "admin" && "Admin"}
-                          {user.role === "teacher" && "Teacher"}
-                          {user.role === "student" && "Student"}
+                          {user?.role === "super-admin" && "Admin"}
+                          {user?.role === "admin" && "Admin"}
+                          {user?.role === "teacher" && "Teacher"}
+                          {user?.role === "student" && "Student"}
                         </>
                       )}
                     </Typography>
@@ -163,35 +170,80 @@ function App() {
               </header>
               <section className="page-scroll-area">
                 <Routes>
-                  <Route path="/" element={<Dashboard />}></Route>
-                  <Route path="/students" element={<Students />}></Route>
-                  <Route path="/teachers" element={<Teachers />}></Route>
-                  <Route path="/classes" element={<Classes />}></Route>
-                  <Route path="/attendance" element={<Attendance />}></Route>
-                  <Route path="/exams-grades" element={<Exams />}></Route>
-                  <Route path="/assignments" element={<Assignments />}></Route>
-                  <Route path="/fees" element={<Fees />}></Route>
+                  {user?.role === "student" ? (
+                    <Route path="/" element={<StudentDashboard />} />
+                  ) : (
+                    <Route path="/" element={<Dashboard />}></Route>
+                  )}
+                  {user?.role !== "student" && (
+                    <Route path="/students" element={<Students />}></Route>
+                  )}
+                  {user?.role !== "student" && (
+                    <Route path="/teachers" element={<Teachers />}></Route>
+                  )}
+                  {user?.role !== "student" && (
+                    <Route path="/classes" element={<Classes />}></Route>
+                  )}
+                  {user?.role !== "student" && (
+                    <Route path="/attendance" element={<Attendance />}></Route>
+                  )}
+                  {user?.role !== "student" && (
+                    <Route path="/exams-grades" element={<Exams />}></Route>
+                  )}
+                  {user?.role !== "student" && (
+                    <Route
+                      path="/assignments"
+                      element={<Assignments />}
+                    ></Route>
+                  )}
+                  {user?.role !== "student" && (
+                    <Route path="/fees" element={<Fees />}></Route>
+                  )}
                   <Route path="/messages" element={<Messages />}></Route>
-                  <Route
-                    path="/notifications"
-                    element={<Notifications />}
-                  ></Route>
-                  <Route path="/timetable" element={<Timetable />}></Route>
-                  <Route
-                    path="/reports-analytics"
-                    element={<Reports />}
-                  ></Route>
-                  <Route path="/users-roles" element={<Users />}></Route>
-                  <Route path="/account" element={<Account />}></Route>
-                  <Route path="/settings" element={<Settings />}></Route>
-
-                  {/* <Route path="/calendar" element={<Calendar />}></Route> */}
+                  {user?.role !== "student" && (
+                    <Route
+                      path="/notifications"
+                      element={<Notifications />}
+                    ></Route>
+                  )}
+                  {user?.role !== "student" && (
+                    <Route path="/timetable" element={<Timetable />}></Route>
+                  )}
+                  {user?.role !== "student" && (
+                    <Route
+                      path="/reports-analytics"
+                      element={<Reports user={user} />}
+                    ></Route>
+                  )}
+                  {user?.role !== "student" && (
+                    <Route path="/users-roles" element={<Users />}></Route>
+                  )}
+                  {user?.role !== "student" && (
+                    <Route path="/account" element={<Account />}></Route>
+                  )}
+                  {user?.role !== "student" && (
+                    <Route path="/settings" element={<Settings />}></Route>
+                  )}
                 </Routes>
               </section>
             </main>
           </div>
         ) : (
-          <Login isMobile={isMobile} onLogin={handleLoginSuccess} />
+          <Routes>
+            <Route
+              path="/login"
+              element={
+                <Login isMobile={isMobile} onLogin={handleLoginSuccess} />
+              }
+            />
+            <Route path="/signup" element={<Signup isMobile={isMobile} />} />
+            <Route
+              path="*"
+              element={
+                <Login isMobile={isMobile} onLogin={handleLoginSuccess} />
+              }
+            />
+          </Routes>
         )}
       </ThemeProvider>
     </ColorModeContext.Provider>

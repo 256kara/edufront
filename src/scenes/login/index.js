@@ -1,4 +1,5 @@
 import { useMemo, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Alert,
   Box,
@@ -35,6 +36,7 @@ const ErrorDialog = ({ open, title, message, onClose }) => (
 export default function Login({ isMobile, onLogin }) {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
     username: "",
     email: "",
@@ -232,7 +234,6 @@ export default function Login({ isMobile, onLogin }) {
         );
         return;
       }
-
       onLogin?.(token);
     } catch (submitError) {
       let errorMessage = "Login failed. Please check your credentials.";
@@ -374,6 +375,16 @@ export default function Login({ isMobile, onLogin }) {
             {isSubmitting ? "Signing In..." : "Log In"}
           </Button>
         </form>
+
+        <Box mt={2} display="flex" justifyContent="center">
+          <Button
+            variant="text"
+            onClick={() => navigate("/signup")}
+            sx={{ color: colors.greenAccent[500] }}
+          >
+            Don't have an account? Sign Up
+          </Button>
+        </Box>
 
         <ErrorDialog
           open={errorDialog.open}

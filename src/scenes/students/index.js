@@ -113,7 +113,7 @@ const Students = () => {
       setError("");
       setRefresh((prev) => !prev);
     } catch (err) {
-      setError("Failed to save student. Please try again.");
+      setError("Failed. Please check fields and try again.");
     }
   };
 
@@ -253,23 +253,25 @@ const Students = () => {
       {/* error */}
       {error && (
         <Box>
-          <Alert severity="info" sx={{ color: colors.blueAccent[300] }}}>
+          <Alert severity="info" sx={{ color: colors.blueAccent[300] }}>
             {error}
           </Alert>
         </Box>
       )}
       {openSuccess && (
-        <Box sx={{ color: colors.blueAccent[300] }}}>
-          <Alert severity="success" sx={{ color: colors.blueAccent[300] }}}>
+        <Box sx={{ color: colors.blueAccent[300] }}>
+          <Alert severity="success" sx={{ color: colors.blueAccent[300] }}>
             {openSuccess}
           </Alert>
         </Box>
       )}
       <Box
         display="flex"
+        flexDirection={{ xs: "column", md: "row" }}
         justifyContent="space-between"
-        alignItems="center"
+        alignItems={{ xs: "flex-start", md: "center" }}
         mb="20px"
+        gap={2}
       >
         <Box>
           <Typography variant="h3" fontWeight="bold" mb={1}>
@@ -279,8 +281,17 @@ const Students = () => {
             Manage your Students.
           </Typography>
         </Box>
-        <Box sx={{ color: colors.blueAccent[300] }}}>
-          <Typography variant="body2" color="text.secondary" sx={{ color: colors.blueAccent[300] }}}>
+        <Box
+          sx={{
+            color: colors.blueAccent[300],
+            width: { xs: "100%", md: "auto" },
+          }}
+        >
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ color: colors.blueAccent[300] }}
+          >
             <strong>Bulk Import:</strong> Download template, fill with student
             data, then upload Excel file.
           </Typography>
@@ -291,29 +302,35 @@ const Students = () => {
       </Box>
 
       {/* dialog */}
+
       <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
         <DialogTitle>Fill Student Data</DialogTitle>
         {error && (
           <Box>
-            <Alert severity="info" sx={{ color: colors.blueAccent[300] }}}>
+            <Alert severity="info" sx={{ color: colors.blueAccent[300] }}>
               {error}
             </Alert>
           </Box>
         )}
-        <DialogContent>
+        <DialogContent sx={{ p: { xs: 2, sm: 3 } }}>
           <Box
             className="student-form"
             component="form"
-            sx={{ color: colors.blueAccent[300] }}}
+            sx={{
+              color: colors.blueAccent[300],
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+              maxWidth: "100%",
+            }}
           >
-            <FormControl sx={{ color: colors.blueAccent[300] }}}>
+            <FormControl sx={{ color: colors.blueAccent[300] }}>
               <TextField
                 name="name"
                 label="Name"
                 variant="filled"
                 value={studentData.name}
                 onChange={handleChange}
-                
                 sx={{
                   "& .MuiOutlinedInput-root": {
                     backgroundColor:
@@ -347,14 +364,13 @@ const Students = () => {
                 onFocus={() => setError("")}
               />
             </FormControl>
-            <FormControl sx={{ color: colors.blueAccent[300] }}}>
+            <FormControl sx={{ color: colors.blueAccent[300] }}>
               <TextField
                 name="phone"
                 label="Phone"
                 variant="filled"
                 value={studentData.phone}
                 onChange={handleChange}
-                
                 sx={{
                   "& .MuiOutlinedInput-root": {
                     backgroundColor:
@@ -388,7 +404,7 @@ const Students = () => {
                 onFocus={() => setError("")}
               />
             </FormControl>
-            <FormControl sx={{ color: colors.blueAccent[300] }}}>
+            <FormControl sx={{ color: colors.blueAccent[300] }}>
               <InputLabel
                 id="gender-id"
                 sx={{
@@ -439,14 +455,13 @@ const Students = () => {
                 <MenuItem value="female">Female</MenuItem>
               </Select>
             </FormControl>
-            <FormControl sx={{ color: colors.blueAccent[300] }}}>
+            <FormControl sx={{ color: colors.blueAccent[300] }}>
               <TextField
                 name="email"
                 label="Email"
                 variant="filled"
                 value={studentData.email}
                 onChange={handleChange}
-                
                 sx={{
                   "& .MuiOutlinedInput-root": {
                     backgroundColor:
@@ -480,7 +495,7 @@ const Students = () => {
                 onFocus={() => setError("")}
               />
             </FormControl>
-            <FormControl sx={{ color: colors.blueAccent[300] }}}>
+            <FormControl sx={{ color: colors.blueAccent[300] }}>
               <TextField
                 name="password"
                 label="Password"
@@ -488,7 +503,6 @@ const Students = () => {
                 variant="filled"
                 value={studentData.password}
                 onChange={handleChange}
-                
                 sx={{
                   "& .MuiOutlinedInput-root": {
                     backgroundColor:
@@ -522,7 +536,7 @@ const Students = () => {
                 onFocus={() => setError("")}
               />
             </FormControl>{" "}
-            <FormControl sx={{ color: colors.blueAccent[300] }}}>
+            <FormControl sx={{ color: colors.blueAccent[300] }}>
               <InputLabel
                 id="classLevel-id"
                 sx={{
@@ -577,14 +591,13 @@ const Students = () => {
                 <MenuItem value="S6">S6</MenuItem>
               </Select>
             </FormControl>
-            <FormControl sx={{ color: colors.blueAccent[300] }}}>
+            <FormControl sx={{ color: colors.blueAccent[300] }}>
               <TextField
                 name="admissionNumber"
                 label="Admission Number"
                 variant="filled"
                 value={studentData.admissionNumber}
                 onChange={handleChange}
-                
                 sx={{
                   "& .MuiOutlinedInput-root": {
                     backgroundColor:
@@ -618,7 +631,7 @@ const Students = () => {
                 onFocus={() => setError("")}
               />
             </FormControl>
-            <FormControl sx={{ color: colors.blueAccent[300] }}}>
+            <FormControl sx={{ color: colors.blueAccent[300] }}>
               <InputLabel
                 id="stream-id"
                 sx={{
@@ -677,7 +690,7 @@ const Students = () => {
                 <MenuItem value="SW">SW</MenuItem>
               </Select>
             </FormControl>
-            <FormControl sx={{ color: colors.blueAccent[300] }}}>
+            <FormControl sx={{ color: colors.blueAccent[300] }}>
               <InputLabel
                 id="combination-id"
                 sx={{
@@ -735,14 +748,13 @@ const Students = () => {
                 <MenuItem value="MAT">MAT</MenuItem>
               </Select>
             </FormControl>
-            <FormControl sx={{ color: colors.blueAccent[300] }}}>
+            <FormControl sx={{ color: colors.blueAccent[300] }}>
               <TextField
                 name="nin"
                 label="NIN"
                 variant="filled"
                 value={studentData.nin}
                 onChange={handleChange}
-                
                 sx={{
                   "& .MuiOutlinedInput-root": {
                     backgroundColor:
@@ -776,14 +788,13 @@ const Students = () => {
                 onFocus={() => setError("")}
               />
             </FormControl>
-            <FormControl sx={{ color: colors.blueAccent[300] }}}>
+            <FormControl sx={{ color: colors.blueAccent[300] }}>
               <TextField
                 name="address"
                 label="Address"
                 variant="filled"
                 value={studentData.address}
                 onChange={handleChange}
-                
                 sx={{
                   "& .MuiOutlinedInput-root": {
                     backgroundColor:
@@ -817,7 +828,7 @@ const Students = () => {
                 onFocus={() => setError("")}
               />
             </FormControl>
-            <FormControl sx={{ color: colors.blueAccent[300] }}}>
+            <FormControl sx={{ color: colors.blueAccent[300] }}>
               <InputLabel
                 id="healthStatus-id"
                 sx={{
@@ -869,14 +880,13 @@ const Students = () => {
                 <MenuItem value="Healthy">Healthy</MenuItem>
               </Select>
             </FormControl>
-            <FormControl sx={{ color: colors.blueAccent[300] }}}>
+            <FormControl sx={{ color: colors.blueAccent[300] }}>
               <TextField
                 name="emergencyContact"
                 label="Emergency Contact"
                 variant="filled"
                 value={studentData.emergencyContact}
                 onChange={handleChange}
-                
                 sx={{
                   "& .MuiOutlinedInput-root": {
                     backgroundColor:
@@ -910,14 +920,13 @@ const Students = () => {
                 onFocus={() => setError("")}
               />
             </FormControl>
-            <FormControl sx={{ color: colors.blueAccent[300] }}}>
+            <FormControl sx={{ color: colors.blueAccent[300] }}>
               <TextField
                 name="username"
                 label="Username"
                 variant="filled"
                 value={studentData.username}
                 onChange={handleChange}
-                
                 sx={{
                   "& .MuiOutlinedInput-root": {
                     backgroundColor:
@@ -951,14 +960,13 @@ const Students = () => {
                 onFocus={() => setError("")}
               />
             </FormControl>
-            <FormControl sx={{ color: colors.blueAccent[300] }}}>
+            <FormControl sx={{ color: colors.blueAccent[300] }}>
               <TextField
                 name="lin"
                 label="LIN"
                 variant="filled"
                 value={studentData.lin}
                 onChange={handleChange}
-                
                 sx={{
                   "& .MuiOutlinedInput-root": {
                     backgroundColor:
@@ -1034,10 +1042,19 @@ const Students = () => {
         spacing={2}
         mb="16px"
         alignItems={{ xs: "stretch", md: "center" }}
+        sx={{ width: "100%" }}
       >
-        <Stack spacing={2} direction="row">
+        <Stack
+          spacing={2}
+          direction={{ xs: "column", sm: "row" }}
+          sx={{ flex: 1, width: { xs: "100%", md: "auto" } }}
+        >
           <Button
-            sx={{ color: colors.blueAccent[300] }}}
+            sx={{
+              color: colors.primary[500],
+              width: { xs: "100%", sm: "auto" },
+              minWidth: { xs: "100%", sm: "120px" },
+            }}
             onClick={handleClickOpen}
             variant="contained"
             color={theme.palette.mode === "dark" ? "secondary" : "primary"}
@@ -1046,16 +1063,25 @@ const Students = () => {
           </Button>
 
           <Button
-            sx={{ color: colors.blueAccent[300] }}}
+            sx={{
+              color: colors.blueAccent[300],
+              width: { xs: "100%", sm: "auto" },
+              minWidth: { xs: "100%", sm: "120px" },
+            }}
             onClick={downloadTemplate}
-            variant="filled"
-            color={theme.palette.mode === "dark" ? "secondary" : "primary"}
+            variant="outlined"
+            color={theme.palette.mode === "dark" ? "primary" : "secondary"}
           >
             Download Template
           </Button>
 
           {/* Single upload button for multiple files */}
-          <Box sx={{ color: colors.blueAccent[300] }}}>
+          <Box
+            sx={{
+              color: colors.blueAccent[300],
+              width: { xs: "100%", sm: "auto" },
+            }}
+          >
             <input
               type="file"
               accept=".xlsx,.xls"
@@ -1068,7 +1094,11 @@ const Students = () => {
               component="label"
               htmlFor="upload-files-input"
               disabled={isUploading}
-              sx={{ color: colors.blueAccent[300] }}}
+              sx={{
+                color: colors.primary[500],
+                width: { xs: "100%", sm: "auto" },
+                minWidth: { xs: "100%", sm: "120px" },
+              }}
               variant="contained"
               color={theme.palette.mode === "dark" ? "secondary" : "primary"}
             >
@@ -1077,7 +1107,11 @@ const Students = () => {
           </Box>
 
           <Button
-            sx={{ color: colors.blueAccent[300] }}}
+            sx={{
+              color: colors.primary[500],
+              width: { xs: "100%", sm: "auto" },
+              minWidth: { xs: "100%", sm: "120px" },
+            }}
             onClick={() => setIsexport(!isexport)}
             variant="contained"
             color={theme.palette.mode === "dark" ? "secondary" : "primary"}
@@ -1088,40 +1122,55 @@ const Students = () => {
 
         <Box
           display="flex"
-          backgroundColor={colors.primary[400]}
-          borderRadius="3px"
-          sx={{ color: colors.blueAccent[300] }} }}
+          flexDirection={{ xs: "column", sm: "row" }}
+          gap={2}
+          sx={{ width: { xs: "100%", md: "auto" } }}
         >
-          <InputBase
-            sx={{ color: colors.blueAccent[300] }}}
-            placeholder="Search student"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-          <IconButton type="button" sx={{ color: colors.blueAccent[300] }}}>
-            <SearchIcon />
-          </IconButton>
-        </Box>
-        <Box sx={{ color: colors.blueAccent[300] }}}>
-          <FormControl >
-            <InputLabel id="classLevel-label">Class</InputLabel>
-            <Select
-              labelId="label"
-              value={classFilter}
-              label="Class"
-              onChange={(e) => setClassFilter(e.target.value)}
-            >
-              <MenuItem value="">
-                <em>All Students</em>
-              </MenuItem>
-              <MenuItem value="S1">S1</MenuItem>
-              <MenuItem value="S2">S2</MenuItem>
-              <MenuItem value="S3">S3</MenuItem>
-              <MenuItem value="S4">S4</MenuItem>
-              <MenuItem value="S5">S5</MenuItem>
-              <MenuItem value="S6">S6</MenuItem>
-            </Select>
-          </FormControl>
+          <Box
+            display="flex"
+            backgroundColor={colors.primary[400]}
+            borderRadius="3px"
+            sx={{
+              color: colors.blueAccent[300],
+              width: { xs: "100%", sm: "200px" },
+            }}
+          >
+            <InputBase
+              sx={{ color: colors.blueAccent[300], flex: 1, px: 2 }}
+              placeholder="Search student"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <IconButton type="button" sx={{ color: colors.blueAccent[300] }}>
+              <SearchIcon />
+            </IconButton>
+          </Box>
+          <Box
+            sx={{
+              color: colors.blueAccent[300],
+              width: { xs: "100%", sm: "150px" },
+            }}
+          >
+            <FormControl fullWidth>
+              <InputLabel id="classLevel-label">Class</InputLabel>
+              <Select
+                labelId="label"
+                value={classFilter}
+                label="Class"
+                onChange={(e) => setClassFilter(e.target.value)}
+              >
+                <MenuItem value="">
+                  <em>All Students</em>
+                </MenuItem>
+                <MenuItem value="S1">S1</MenuItem>
+                <MenuItem value="S2">S2</MenuItem>
+                <MenuItem value="S3">S3</MenuItem>
+                <MenuItem value="S4">S4</MenuItem>
+                <MenuItem value="S5">S5</MenuItem>
+                <MenuItem value="S6">S6</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
         </Box>
       </Stack>
       <StudentsTable

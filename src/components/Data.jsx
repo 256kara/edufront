@@ -1,3 +1,4 @@
+import * as React from "react";
 import * as XLSX from "xlsx";
 import { useState, useEffect } from "react";
 import { useContext } from "react";
@@ -32,6 +33,7 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
   const { user } = useContext(AuthContext);
   const [students, setStudents] = useState([]);
   const [page, setPage] = useState(1);
+  const [error, setError] = React.useState("");
 
   // Responsive breakpoints
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -43,18 +45,21 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
   const [editMode, setEditMode] = useState(false);
   const [editedStudent, setEditedStudent] = useState({});
 
-  // useEffect(() => {
-  //   fetchStudents();
-  // }, [page, { search }, { classFilter }, refresh]);
+  useEffect(() => {
+    fetchStudents();
+  }, [page, { search }, { classFilter }, refresh]);
 
-  // const fetchStudents = async () => {
-  //   if (!user?.school_name) return;
-  //   const res = await apiRequest.get(
-  //     `http://localhost:5000/api/admin/students/${user?.school_name}?page=${page}&search=${search}&class=${classFilter}`,
-  //   );
-
-  //   setStudents(res.data.students);
-  // };
+  const fetchStudents = async () => {
+    try {
+      if (!user?.school_name) return;
+      const res = await apiRequest.get(
+        `http://localhost:5000/api/admin/students/${user?.school_name}?page=${page}&search=${search}&class=${classFilter}`,
+      );
+      setStudents(res.data.students);
+    } catch (err) {
+      setError(err.response?.data?.message || "Something went wrong");
+    }
+  };
 
   const deleteStudent = async (id) => {
     try {
@@ -82,7 +87,7 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
     try {
       // Update student data via API
       await apiRequest.put(
-        `http://localhost:5000/api/admin/update-student/${selectedStudent._id}`,
+        `http://localhost:5000/api/admin/update-student/${selectedStudent.userId}`,
         editedStudent,
       );
 
@@ -463,6 +468,7 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
           <Typography variant="h6">
             {editMode ? "Edit Student Profile" : "Student Profile"}
           </Typography>
+          <Typography>{error ? { error } : null}</Typography>
         </DialogTitle>
 
         <DialogContent sx={{ p: 3 }}>
@@ -471,8 +477,15 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
               <Grid container spacing={3}>
                 {/* Basic Information */}
                 <Grid item xs={12}>
-                  <Typography variant="h6" gutterBottom color="primary">
-                    Basic Information
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    sx={{
+                      color:
+                        theme.palette.mode === "dark" ? "secondary" : "primary",
+                    }}
+                  >
+                    Basic Information{" "}
                   </Typography>
                   <Divider sx={{ mb: 2 }} />
                 </Grid>
@@ -510,34 +523,26 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
-                  <FormControl
+                  <TextField
                     fullWidth
+                    label="Gender"
+                    value={
+                      editMode
+                        ? editedStudent.gender || ""
+                        : selectedStudent.gender || ""
+                    }
+                    onChange={(e) =>
+                      handleInputChange("gender", e.target.value)
+                    }
+                    InputProps={{ readOnly: !editMode }}
                     variant={editMode ? "outlined" : "filled"}
-                  >
-                    <InputLabel>Gender</InputLabel>
-                    <Select
-                      value={
-                        editMode
-                          ? editedStudent.gender || ""
-                          : selectedStudent.gender || ""
-                      }
-                      onChange={(e) =>
-                        handleInputChange("gender", e.target.value)
-                      }
-                      readOnly={!editMode}
-                      inputProps={{ readOnly: !editMode }}
-                    >
-                      <MenuItem value="male">Male</MenuItem>
-                      <MenuItem value="female">Female</MenuItem>
-                    </Select>
-                  </FormControl>
+                  />
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
                     label="Email"
-                    type="email"
                     value={
                       editMode
                         ? editedStudent.email || ""
@@ -555,7 +560,11 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
                     variant="h6"
                     gutterBottom
                     color="primary"
-                    sx={{ mt: 2 }}
+                    sx={{
+                      color:
+                        theme.palette.mode === "dark" ? "secondary" : "primary",
+                      mt: 2,
+                    }}
                   >
                     Academic Information
                   </Typography>
@@ -613,7 +622,11 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
                     variant="h6"
                     gutterBottom
                     color="primary"
-                    sx={{ mt: 2 }}
+                    sx={{
+                      color:
+                        theme.palette.mode === "dark" ? "secondary" : "primary",
+                      mt: 2,
+                    }}
                   >
                     Contact Information
                   </Typography>
@@ -673,7 +686,11 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
                     variant="h6"
                     gutterBottom
                     color="primary"
-                    sx={{ mt: 2 }}
+                    sx={{
+                      color:
+                        theme.palette.mode === "dark" ? "secondary" : "primary",
+                      mt: 2,
+                    }}
                   >
                     Additional Information
                   </Typography>
@@ -750,7 +767,11 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
                     variant="h6"
                     gutterBottom
                     color="primary"
-                    sx={{ mt: 2 }}
+                    sx={{
+                      color:
+                        theme.palette.mode === "dark" ? "secondary" : "primary",
+                      mt: 2,
+                    }}
                   >
                     Health & Emergency Information
                   </Typography>

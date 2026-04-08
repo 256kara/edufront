@@ -46,7 +46,7 @@ const Item = ({ title, to, icon, selected, setSelected, onNavigate }) => {
   );
 };
 
-const Sidenav = ({ isMobile = false, onNavigate }) => {
+const Sidenav = ({ isMobile = false, onNavigate, user }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const location = useLocation();
@@ -72,10 +72,13 @@ const Sidenav = ({ isMobile = false, onNavigate }) => {
 
   const activeTitle = routeToTitle[location.pathname] || selected;
 
+  const isStudent = user?.role === "student";
+
   return (
     <Box
       sx={{
-        height: "100%",
+        // change height if student to avoid covering messages page
+        height: isStudent ? "calc(100vh - 70px)" : "100%",
         "& .ps-sidebar-root": { border: "none" },
         [`& .${sidebarClasses.container}`]: {
           backgroundColor: colors.primary[400],
@@ -156,7 +159,7 @@ const Sidenav = ({ isMobile = false, onNavigate }) => {
               onNavigate={onNavigate}
             />
 
-            {!collapsed && (
+            {!collapsed && !isStudent && (
               <Typography
                 variant="h6"
                 color={colors.grey[300]}
@@ -166,62 +169,76 @@ const Sidenav = ({ isMobile = false, onNavigate }) => {
               </Typography>
             )}
 
-            <Item
-              title="Students"
-              to="/students"
-              icon={<SchoolOutlinedIcon />}
-              selected={activeTitle}
-              setSelected={setSelected}
-              onNavigate={onNavigate}
-            />
-            <Item
-              title="Teachers"
-              to="/teachers"
-              icon={<PersonOutlinedIcon />}
-              selected={activeTitle}
-              setSelected={setSelected}
-              onNavigate={onNavigate}
-            />
-            <Item
-              title="Classes"
-              to="/classes"
-              icon={<ClassOutlinedIcon />}
-              selected={activeTitle}
-              setSelected={setSelected}
-              onNavigate={onNavigate}
-            />
-            <Item
-              title="Attendance"
-              to="/attendance"
-              icon={<FactCheckOutlinedIcon />}
-              selected={activeTitle}
-              setSelected={setSelected}
-              onNavigate={onNavigate}
-            />
-            <Item
-              title="Exams & Grades"
-              to="/exams-grades"
-              icon={<GradingOutlinedIcon />}
-              selected={activeTitle}
-              setSelected={setSelected}
-              onNavigate={onNavigate}
-            />
-            <Item
-              title="Assignments"
-              to="/assignments"
-              icon={<AssignmentOutlinedIcon />}
-              selected={activeTitle}
-              setSelected={setSelected}
-              onNavigate={onNavigate}
-            />
-            <Item
-              title="Fees / Finance"
-              to="/fees"
-              icon={<AccountBalanceWalletOutlinedIcon />}
-              selected={activeTitle}
-              setSelected={setSelected}
-              onNavigate={onNavigate}
-            />
+            {!isStudent && (
+              <Item
+                title="Students"
+                to="/students"
+                icon={<SchoolOutlinedIcon />}
+                selected={activeTitle}
+                setSelected={setSelected}
+                onNavigate={onNavigate}
+              />
+            )}
+            {!isStudent && (
+              <Item
+                title="Teachers"
+                to="/teachers"
+                icon={<PersonOutlinedIcon />}
+                selected={activeTitle}
+                setSelected={setSelected}
+                onNavigate={onNavigate}
+              />
+            )}
+            {!isStudent && (
+              <Item
+                title="Classes"
+                to="/classes"
+                icon={<ClassOutlinedIcon />}
+                selected={activeTitle}
+                setSelected={setSelected}
+                onNavigate={onNavigate}
+              />
+            )}
+            {!isStudent && (
+              <Item
+                title="Attendance"
+                to="/attendance"
+                icon={<FactCheckOutlinedIcon />}
+                selected={activeTitle}
+                setSelected={setSelected}
+                onNavigate={onNavigate}
+              />
+            )}
+            {!isStudent && (
+              <Item
+                title="Exams & Grades"
+                to="/exams-grades"
+                icon={<GradingOutlinedIcon />}
+                selected={activeTitle}
+                setSelected={setSelected}
+                onNavigate={onNavigate}
+              />
+            )}
+            {!isStudent && (
+              <Item
+                title="Assignments"
+                to="/assignments"
+                icon={<AssignmentOutlinedIcon />}
+                selected={activeTitle}
+                setSelected={setSelected}
+                onNavigate={onNavigate}
+              />
+            )}
+            {!isStudent && (
+              <Item
+                title="Fees / Finance"
+                to="/fees"
+                icon={<AccountBalanceWalletOutlinedIcon />}
+                selected={activeTitle}
+                setSelected={setSelected}
+                onNavigate={onNavigate}
+              />
+            )}
 
             {!collapsed && (
               <Typography
@@ -242,23 +259,27 @@ const Sidenav = ({ isMobile = false, onNavigate }) => {
               onNavigate={onNavigate}
             />
 
-            <Item
-              title="Notifications"
-              to="/notifications"
-              icon={<NotificationsOutlinedIcon />}
-              selected={activeTitle}
-              setSelected={setSelected}
-              onNavigate={onNavigate}
-            />
+            {!isStudent && (
+              <Item
+                title="Notifications"
+                to="/notifications"
+                icon={<NotificationsOutlinedIcon />}
+                selected={activeTitle}
+                setSelected={setSelected}
+                onNavigate={onNavigate}
+              />
+            )}
 
-            <Item
-              title="Timetable"
-              to="/timetable"
-              icon={<CalendarMonthOutlinedIcon />}
-              selected={activeTitle}
-              setSelected={setSelected}
-              onNavigate={onNavigate}
-            />
+            {!isStudent && (
+              <Item
+                title="Timetable"
+                to="/timetable"
+                icon={<CalendarMonthOutlinedIcon />}
+                selected={activeTitle}
+                setSelected={setSelected}
+                onNavigate={onNavigate}
+              />
+            )}
 
             {!collapsed && (
               <Typography
@@ -278,7 +299,7 @@ const Sidenav = ({ isMobile = false, onNavigate }) => {
               onNavigate={onNavigate}
             />
 
-            {!collapsed && (
+            {!collapsed && !isStudent && (
               <Typography
                 variant="h6"
                 color={colors.grey[300]}
@@ -287,32 +308,38 @@ const Sidenav = ({ isMobile = false, onNavigate }) => {
                 Administration
               </Typography>
             )}
-            <Item
-              title="Users & Roles"
-              to="/users-roles"
-              icon={<AdminPanelSettingsOutlinedIcon />}
-              selected={activeTitle}
-              setSelected={setSelected}
-              onNavigate={onNavigate}
-            />
+            {!isStudent && (
+              <Item
+                title="Users & Roles"
+                to="/users-roles"
+                icon={<AdminPanelSettingsOutlinedIcon />}
+                selected={activeTitle}
+                setSelected={setSelected}
+                onNavigate={onNavigate}
+              />
+            )}
 
-            <Item
-              title="Settings"
-              to="/settings"
-              icon={<SettingsOutlinedIcon />}
-              selected={activeTitle}
-              setSelected={setSelected}
-              onNavigate={onNavigate}
-            />
+            {!isStudent && (
+              <Item
+                title="Settings"
+                to="/settings"
+                icon={<SettingsOutlinedIcon />}
+                selected={activeTitle}
+                setSelected={setSelected}
+                onNavigate={onNavigate}
+              />
+            )}
 
-            <Item
-              title="Account"
-              to="/account"
-              icon={<PersonOutlinedIcon />}
-              selected={activeTitle}
-              setSelected={setSelected}
-              onNavigate={onNavigate}
-            />
+            {!isStudent && (
+              <Item
+                title="Account"
+                to="/account"
+                icon={<PersonOutlinedIcon />}
+                selected={activeTitle}
+                setSelected={setSelected}
+                onNavigate={onNavigate}
+              />
+            )}
           </Box>
           <Box>
             <Box>
