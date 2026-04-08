@@ -264,7 +264,7 @@ export default function Login({ isMobile, onLogin }) {
           </Typography>
 
           <img
-            src="https://edupulse.netlify.app/static/media/login-illustration.9c8b1e5a.png"
+            src="https://canva.link/bjmer32i48hn72w"
             alt="Login Illustration"
             className="login-illustration"
           />
