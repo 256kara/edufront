@@ -61,10 +61,11 @@ body,
 }
 
 .login-illustration {
-  width: 100%;
+  width: 60%;
   max-width: 560px;
   height: auto;
   align-self: center;
+  border-radius: 50%;
 }
 
 .login-card {

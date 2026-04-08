@@ -263,11 +263,13 @@ export default function Login({ isMobile, onLogin }) {
             Smarter school operations in one dashboard.
           </Typography>
 
-          <img
-            src="https://canva.link/bjmer32i48hn72w"
-            alt="Login Illustration"
-            className="login-illustration"
-          />
+          <Box>
+            <img
+              src="edulogo.png"
+              alt="Login Illustration"
+              className="login-illustration"
+            />
+          </Box>
         </Box>
       )}
 
