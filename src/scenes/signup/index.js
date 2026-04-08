@@ -34,7 +34,7 @@ const ErrorDialog = ({ open, title, message, onClose }) => (
 
 export default function Signup({ isMobile }) {
   const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
+  const colors = tokens("light");
   const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
     name: "",
@@ -217,19 +217,7 @@ export default function Signup({ isMobile }) {
         padding: 3,
       }}
     >
-      <Box
-        component="form"
-        onSubmit={handleSubmit}
-        sx={{
-          width: "100%",
-          maxWidth: 600,
-          backgroundColor: colors.primary[400],
-          padding: 4,
-          borderRadius: 2,
-          boxShadow: 3,
-          height: "auto",
-        }}
-      >
+      <Box className="login-card" sx={{ width: "100%", maxWidth: 600 }}>
         <Typography
           variant="h4"
           gutterBottom
@@ -239,186 +227,188 @@ export default function Signup({ isMobile }) {
           Admin Signup
         </Typography>
 
-        {error && (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {error}
-          </Alert>
-        )}
+        <Box component="form" className="login-form" onSubmit={handleSubmit}>
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error}
+            </Alert>
+          )}
 
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label="Name"
-              name="name"
-              value={formValues.name}
-              onChange={handleInputChange}
-              error={!!fieldErrors.name}
-              helperText={fieldErrors.name}
-              sx={textFieldSx}
-              margin="normal"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label="Email"
-              name="email"
-              type="email"
-              value={formValues.email}
-              onChange={handleInputChange}
-              error={!!fieldErrors.email}
-              helperText={fieldErrors.email}
-              sx={textFieldSx}
-              margin="normal"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label="Password"
-              name="password"
-              type="password"
-              value={formValues.password}
-              onChange={handleInputChange}
-              error={!!fieldErrors.password}
-              helperText={fieldErrors.password}
-              sx={textFieldSx}
-              margin="normal"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label="Confirm Password"
-              name="confirmPassword"
-              type="password"
-              value={formValues.confirmPassword}
-              onChange={handleInputChange}
-              error={!!fieldErrors.confirmPassword}
-              helperText={fieldErrors.confirmPassword}
-              sx={textFieldSx}
-              margin="normal"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label="School Name"
-              name="school_name"
-              value={formValues.school_name}
-              onChange={handleInputChange}
-              error={!!fieldErrors.school_name}
-              helperText={fieldErrors.school_name}
-              sx={textFieldSx}
-              margin="normal"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label="Phone"
-              name="phone"
-              value={formValues.phone}
-              onChange={handleInputChange}
-              error={!!fieldErrors.phone}
-              helperText={fieldErrors.phone}
-              sx={textFieldSx}
-              margin="normal"
-            />
-          </Grid>
-        </Grid>
-
-        {isPayment && (
-          <>
-            <Typography
-              variant="h6"
-              gutterBottom
-              sx={{ mt: 3, color: colors.greenAccent[500] }}
-            >
-              Payment Information (Demo)
-            </Typography>
-
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Card Number"
-                  name="cardNumber"
-                  value={formValues.cardNumber}
-                  onChange={handleInputChange}
-                  error={!!fieldErrors.cardNumber}
-                  helperText={fieldErrors.cardNumber}
-                  sx={textFieldSx}
-                  margin="normal"
-                />
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <TextField
-                  fullWidth
-                  label="Expiry (MM/YY)"
-                  name="expiry"
-                  value={formValues.expiry}
-                  onChange={handleInputChange}
-                  error={!!fieldErrors.expiry}
-                  helperText={fieldErrors.expiry}
-                  sx={textFieldSx}
-                  margin="normal"
-                />
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <TextField
-                  fullWidth
-                  label="CVV"
-                  name="cvv"
-                  value={formValues.cvv}
-                  onChange={handleInputChange}
-                  error={!!fieldErrors.cvv}
-                  helperText={fieldErrors.cvv}
-                  sx={textFieldSx}
-                  margin="normal"
-                />
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <TextField
-                  fullWidth
-                  label="Name on Card"
-                  name="nameOnCard"
-                  value={formValues.nameOnCard}
-                  onChange={handleInputChange}
-                  error={!!fieldErrors.nameOnCard}
-                  helperText={fieldErrors.nameOnCard}
-                  sx={textFieldSx}
-                  margin="normal"
-                />
-              </Grid>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="Name"
+                name="name"
+                value={formValues.name}
+                onChange={handleInputChange}
+                error={!!fieldErrors.name}
+                helperText={fieldErrors.name}
+                sx={textFieldSx}
+                margin="normal"
+              />
             </Grid>
-          </>
-        )}
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="Email"
+                name="email"
+                type="email"
+                value={formValues.email}
+                onChange={handleInputChange}
+                error={!!fieldErrors.email}
+                helperText={fieldErrors.email}
+                sx={textFieldSx}
+                margin="normal"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="Password"
+                name="password"
+                type="password"
+                value={formValues.password}
+                onChange={handleInputChange}
+                error={!!fieldErrors.password}
+                helperText={fieldErrors.password}
+                sx={textFieldSx}
+                margin="normal"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="Confirm Password"
+                name="confirmPassword"
+                type="password"
+                value={formValues.confirmPassword}
+                onChange={handleInputChange}
+                error={!!fieldErrors.confirmPassword}
+                helperText={fieldErrors.confirmPassword}
+                sx={textFieldSx}
+                margin="normal"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="School Name"
+                name="school_name"
+                value={formValues.school_name}
+                onChange={handleInputChange}
+                error={!!fieldErrors.school_name}
+                helperText={fieldErrors.school_name}
+                sx={textFieldSx}
+                margin="normal"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="Phone"
+                name="phone"
+                value={formValues.phone}
+                onChange={handleInputChange}
+                error={!!fieldErrors.phone}
+                helperText={fieldErrors.phone}
+                sx={textFieldSx}
+                margin="normal"
+              />
+            </Grid>
+          </Grid>
 
-        <Box mt={3} display="flex" justifyContent="center">
-          <Button
-            type="submit"
-            variant="contained"
-            disabled={!isFormValid || isSubmitting}
-            sx={{
-              backgroundColor: colors.greenAccent[600],
-              "&:hover": { backgroundColor: colors.greenAccent[700] },
-              minWidth: 150,
-            }}
-          >
-            {isSubmitting ? "Signing Up..." : "Sign Up"}
-          </Button>
-        </Box>
+          {isPayment && (
+            <>
+              <Typography
+                variant="h6"
+                gutterBottom
+                sx={{ mt: 3, color: colors.greenAccent[500] }}
+              >
+                Payment Information (Demo)
+              </Typography>
 
-        <Box mt={2} display="flex" justifyContent="center">
-          <Button
-            variant="text"
-            onClick={() => navigate("/login")}
-            sx={{ color: colors.greenAccent[500] }}
-          >
-            Already have an account? Login
-          </Button>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Card Number"
+                    name="cardNumber"
+                    value={formValues.cardNumber}
+                    onChange={handleInputChange}
+                    error={!!fieldErrors.cardNumber}
+                    helperText={fieldErrors.cardNumber}
+                    sx={textFieldSx}
+                    margin="normal"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <TextField
+                    fullWidth
+                    label="Expiry (MM/YY)"
+                    name="expiry"
+                    value={formValues.expiry}
+                    onChange={handleInputChange}
+                    error={!!fieldErrors.expiry}
+                    helperText={fieldErrors.expiry}
+                    sx={textFieldSx}
+                    margin="normal"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <TextField
+                    fullWidth
+                    label="CVV"
+                    name="cvv"
+                    value={formValues.cvv}
+                    onChange={handleInputChange}
+                    error={!!fieldErrors.cvv}
+                    helperText={fieldErrors.cvv}
+                    sx={textFieldSx}
+                    margin="normal"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <TextField
+                    fullWidth
+                    label="Name on Card"
+                    name="nameOnCard"
+                    value={formValues.nameOnCard}
+                    onChange={handleInputChange}
+                    error={!!fieldErrors.nameOnCard}
+                    helperText={fieldErrors.nameOnCard}
+                    sx={textFieldSx}
+                    margin="normal"
+                  />
+                </Grid>
+              </Grid>
+            </>
+          )}
+
+          <Box mt={3} display="flex" justifyContent="center">
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={!isFormValid || isSubmitting}
+              sx={{
+                backgroundColor: colors.greenAccent[600],
+                "&:hover": { backgroundColor: colors.greenAccent[700] },
+                minWidth: 150,
+              }}
+            >
+              {isSubmitting ? "Signing Up..." : "Sign Up"}
+            </Button>
+          </Box>
+
+          <Box mt={2} display="flex" justifyContent="center">
+            <Button
+              variant="text"
+              onClick={() => navigate("/login")}
+              sx={{ color: colors.greenAccent[500] }}
+            >
+              Already have an account? Login
+            </Button>
+          </Box>
         </Box>
       </Box>
 
