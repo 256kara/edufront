@@ -12,7 +12,7 @@ import { ResponsiveLine } from "@nivo/line";
 import { ResponsivePie } from "@nivo/pie";
 import { ResponsiveBar } from "@nivo/bar";
 import { useState, useEffect } from "react";
-import { apiRequest } from "../../api";
+// import { apiRequest } from "../../api";
 
 const StudentDashboard = () => {
   const theme = useTheme();
@@ -53,6 +53,38 @@ const StudentDashboard = () => {
 
   // Fetch real data if needed
   useEffect(() => {
+    setAttendanceData([
+      { month: "Jan", attendance: 95 },
+      { month: "Feb", attendance: 92 },
+      { month: "Mar", attendance: 98 },
+      { month: "Apr", attendance: 96 },
+      { month: "May", attendance: 94 },
+    ]);
+
+    setResultsData([
+      { subject: "Math", grade: "A", score: 85 },
+      { subject: "English", grade: "B+", score: 78 },
+      { subject: "Science", grade: "A-", score: 82 },
+      { subject: "History", grade: "B", score: 75 },
+      { subject: "Art", grade: "A", score: 88 },
+    ]);
+
+    setPerformanceData([
+      {
+        id: "Performance",
+        data: [
+          { x: "Term 1", y: 75 },
+          { x: "Term 2", y: 82 },
+          { x: "Term 3", y: 78 },
+        ],
+      },
+    ]);
+
+    setAttendancePieData([
+      { id: "Present", value: 95, color: "#4cceac" },
+      { id: "Absent", value: 5, color: "#db4f4a" },
+    ]);
+
     // Example: fetch attendance
     // apiRequest.get('/student/attendance').then(res => setAttendanceData(res.data));
   }, []);

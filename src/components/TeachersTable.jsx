@@ -1,7 +1,7 @@
 import * as XLSX from "xlsx";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useContext } from "react";
-import { apiRequest } from "../api";
+// import { apiRequest } from "../api";
 import { AuthContext } from "../context/AuthContext";
 import {
   Box,
@@ -35,7 +35,7 @@ function TeachersTable({ search, classFilter, isexport, refresh }) {
 
   // Responsive breakpoints
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const isTablet = useMediaQuery(theme.breakpoints.down("md"));
+  // const isTablet = useMediaQuery(theme.breakpoints.down("md"));
 
   // Profile modal state
   const [profileOpen, setProfileOpen] = useState(false);
@@ -43,11 +43,7 @@ function TeachersTable({ search, classFilter, isexport, refresh }) {
   const [editMode, setEditMode] = useState(false);
   const [editedTeacher, setEditedTeacher] = useState({});
 
-  useEffect(() => {
-    fetchTeachers();
-  }, [page, search, classFilter, refresh]);
-
-  const fetchTeachers = async () => {
+  const fetchTeachers = useCallback(async () => {
     if (!user?.school_name) return;
     // Mock data for now - replace with API call
     const mockTeachers = [
@@ -81,7 +77,11 @@ function TeachersTable({ search, classFilter, isexport, refresh }) {
       },
     ];
     setTeachers(mockTeachers);
-  };
+  }, [user?.school_name]);
+
+  useEffect(() => {
+    fetchTeachers();
+  }, [page, search, classFilter, refresh, fetchTeachers]);
 
   const deleteTeacher = async (id) => {
     try {
@@ -142,7 +142,7 @@ function TeachersTable({ search, classFilter, isexport, refresh }) {
     return uname.charAt(0).toUpperCase() + uname.slice(1);
   };
 
-  const exportExcel = () => {
+  const exportExcel = useCallback(() => {
     const exportData = teachers?.map((teacher) => ({
       NAME: capusername(teacher.name),
       EMAIL: teacher.email || "",
@@ -160,13 +160,13 @@ function TeachersTable({ search, classFilter, isexport, refresh }) {
     XLSX.utils.book_append_sheet(workbook, worksheet, "Teachers");
 
     XLSX.writeFile(workbook, "teachers.xlsx");
-  };
+  }, [teachers]);
 
   useEffect(() => {
     if (isexport) {
       exportExcel();
     }
-  }, [isexport]);
+  }, [isexport, exportExcel]);
 
   const columns = [
     {

@@ -11,7 +11,7 @@ import { ResponsiveLine } from "@nivo/line";
 import { ResponsivePie } from "@nivo/pie";
 import { ResponsiveBar } from "@nivo/bar";
 import { useState, useEffect } from "react";
-import { apiRequest } from "../../api";
+// import { apiRequest } from "../../api";
 
 const Reports = ({ user }) => {
   const theme = useTheme();
@@ -65,6 +65,46 @@ const Reports = ({ user }) => {
 
   // Fetch real data if needed
   useEffect(() => {
+    setSchoolPerformanceData([
+      {
+        id: "Average Score",
+        data: [
+          { x: "Term 1", y: 69 },
+          { x: "Term 2", y: 66 },
+          { x: "Term 3", y: 70 },
+        ],
+      },
+      {
+        id: "Top Performer",
+        data: [
+          { x: "Term 1", y: 75 },
+          { x: "Term 2", y: 78 },
+          { x: "Term 3", y: 80 },
+        ],
+      },
+    ]);
+
+    setGradeDistributionData([
+      { id: "A", value: 35, color: "#4cceac" },
+      { id: "B", value: 28, color: "#6870fa" },
+      { id: "C", value: 20, color: "#db4f4a" },
+      { id: "D", value: 12, color: "#e25f52" },
+      { id: "F", value: 5, color: "#e2726e" },
+    ]);
+    setAttendanceTrendsData([
+      { month: "Jan", present: 95, absent: 5 },
+      { month: "Feb", present: 92, absent: 8 },
+      { month: "Mar", present: 98, absent: 2 },
+      { month: "Apr", present: 96, absent: 4 },
+      { month: "May", present: 94, absent: 6 },
+    ]);
+    setSubjectPerformanceData([
+      { subject: "Mathematics", score: 85, students: 120 },
+      { subject: "English", score: 78, students: 115 },
+      { subject: "Science", score: 82, students: 118 },
+      { subject: "History", score: 75, students: 110 },
+      { subject: "Art", score: 88, students: 105 },
+    ]);
     // Example: fetch reports data
     // apiRequest.get('/reports/school-performance').then(res => setSchoolPerformanceData(res.data));
   }, []);

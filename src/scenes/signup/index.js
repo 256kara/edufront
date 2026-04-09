@@ -1,11 +1,11 @@
-import { useMemo, useState, useCallback } from "react";
+import { useMemo, useState, useCallback, useEffect } from "react";
 import {
   Alert,
   Box,
   Button,
   TextField,
   Typography,
-  useTheme,
+  // useTheme,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -33,7 +33,7 @@ const ErrorDialog = ({ open, title, message, onClose }) => (
 );
 
 export default function Signup({ isMobile }) {
-  const theme = useTheme();
+  // const theme = useTheme();
   const colors = tokens("light");
   const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
@@ -60,7 +60,9 @@ export default function Signup({ isMobile }) {
   });
 
   const [isPayment, setIsPayment] = useState(false);
-
+  useEffect(() => {
+    setIsPayment(false);
+  }, []);
   const textFieldSx = {
     input: {
       color: colors.greenAccent[500],

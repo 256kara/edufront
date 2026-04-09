@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as XLSX from "xlsx";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useContext } from "react";
 import { apiRequest } from "../api";
 import { AuthContext } from "../context/AuthContext";
@@ -37,7 +37,7 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
 
   // Responsive breakpoints
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const isTablet = useMediaQuery(theme.breakpoints.down("md"));
+  // const isTablet = useMediaQuery(theme.breakpoints.down("md"));
 
   // Profile modal state
   const [profileOpen, setProfileOpen] = useState(false);
@@ -45,11 +45,7 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
   const [editMode, setEditMode] = useState(false);
   const [editedStudent, setEditedStudent] = useState({});
 
-  useEffect(() => {
-    fetchStudents();
-  }, [page, { search }, { classFilter }, refresh]);
-
-  const fetchStudents = async () => {
+  const fetchStudents = useCallback(async () => {
     try {
       if (!user?.school_name) return;
       const res = await apiRequest.get(
@@ -59,7 +55,11 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
     }
-  };
+  }, [user?.school_name, page, search, classFilter]);
+
+  useEffect(() => {
+    fetchStudents();
+  }, [page, search, classFilter, refresh, fetchStudents]);
 
   const deleteStudent = async (id) => {
     try {
@@ -129,7 +129,7 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
     return uname.charAt(0).toUpperCase() + uname.slice(1);
   };
 
-  const exportExcel = () => {
+  const exportExcel = useCallback(() => {
     const exportData = students?.map((student) => ({
       "ADMISSION NO": student.admissionNumber,
       NAME: capusername(student.name),
@@ -153,7 +153,7 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
     XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
 
     XLSX.writeFile(workbook, "students.xlsx");
-  };
+  }, [students]);
 
   //   export run once
   useEffect(() => {
@@ -161,7 +161,7 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
       exportExcel();
       return;
     }
-  }, [isexport]);
+  }, [isexport, exportExcel]);
 
   const columns = [
     {

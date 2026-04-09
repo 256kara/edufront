@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useContext } from "react";
 import { ColorModeContext, useMode } from "./theme";
 import {
@@ -8,7 +8,7 @@ import {
   Typography,
   Box,
 } from "@mui/material";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Topbar from "./scenes/global/Topbar";
 import Sidenav from "./scenes/global/Sidenav";
 import Dashboard from "./scenes/dashboard";
@@ -18,7 +18,7 @@ import Teachers from "./scenes/teachers";
 import Classes from "./scenes/classes";
 import Attendance from "./scenes/attendance";
 import Exams from "./scenes/exam-and-grades";
-import Assignments from "./assignments";
+import Assignments from "./scenes/assignments";
 import Fees from "./scenes/fees-and-finance";
 import Timetable from "./scenes/timetable";
 import Messages from "./scenes/messages";
@@ -49,7 +49,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  async function fetchCurrentUser() {
+  const fetchCurrentUser = useCallback(async () => {
     const token = localStorage.getItem(AUTH_TOKEN_KEY);
     if (token) {
       await apiRequest
@@ -66,10 +66,11 @@ function App() {
       setUser(null);
     }
     setIsLoading(false);
-  }
+  }, [setUser]);
+
   useEffect(() => {
     fetchCurrentUser();
-  }, [loggedIn]);
+  }, [loggedIn, fetchCurrentUser]);
 
   useEffect(() => {
     if (!isMobile) {

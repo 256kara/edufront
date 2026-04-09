@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useContext } from "react";
 
 import {
@@ -48,7 +48,7 @@ const Messages = () => {
   const [selectedMessageId, setSelectedMessageId] = useState(null);
   const isStudent = user?.role === "student";
 
-  const fetchMessages = async (schoolId) => {
+  const fetchMessages = useCallback(async (schoolId) => {
     if (!schoolId) return;
     setFetching(true);
     setError("");
@@ -65,7 +65,7 @@ const Messages = () => {
     } finally {
       setFetching(false);
     }
-  };
+  }, []);
 
   const refresh = () => {
     if (user?.school_id) fetchMessages(user?.school_id);
@@ -88,12 +88,12 @@ const Messages = () => {
 
   useEffect(() => {
     if (user?.school_id) fetchMessages(user.school_id);
-  }, [user?.school_id]);
+  }, [user?.school_id, fetchMessages]);
 
   // fetch messages when page loads
   useEffect(() => {
     if (user?.school_id) fetchMessages(user.school_id);
-  }, []);
+  }, [user?.school_id, fetchMessages]);
 
   const handleCreate = async () => {
     if (!form.title.trim() || !form.content.trim()) {

@@ -20,7 +20,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Alert,
+  // Alert,
   Tabs,
   Tab,
   Paper,
@@ -194,13 +194,13 @@ const Account = () => {
     </div>
   );
 
-  const [work, setWork] = useState({
-    name: "",
-  });
+  // const [work, setWork] = useState({
+  //   name: "",
+  // });
 
-  const handlework = (e) => {
-    setWork(e.target.value);
-  };
+  // const handlework = (e) => {
+  //   setWork(e.target.value);
+  // };
 
   return (
     <Box m={isMobile ? "10px" : "20px"}>
@@ -989,10 +989,10 @@ const Account = () => {
                     control={
                       <Switch
                         checked={preferences.darkMode}
-                        onChange={(e) => (
-                          colorMode.toggleColorMode(),
-                          handlePreferenceChange("darkMode", e.target.checked)
-                        )}
+                        onChange={(e) => {
+                          colorMode.toggleColorMode();
+                          handlePreferenceChange("darkMode", e.target.checked);
+                        }}
                         sx={{
                           "& .MuiSwitch-switchBase.Mui-checked": {
                             color: colors.greenAccent[500],

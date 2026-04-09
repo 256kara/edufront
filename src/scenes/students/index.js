@@ -275,6 +275,7 @@ const Students = () => {
       >
         <Box>
           <Typography variant="h3" fontWeight="bold" mb={1}>
+            {files && null}
             Students
           </Typography>
           <Typography variant="h6" color="text.secondary">
