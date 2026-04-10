@@ -1,6 +1,5 @@
 ````python?code_reference&code_event_index=1
-# Generating the final README.md file for the Edupulse System
-readme_content = """# EduPulse | Modern School Management & Analytics
+"""# EduPulse | Modern School Management & Analytics
 
 EduPulse is an enterprise-grade School Management System (SMS) designed to streamline academic administration and provide actionable insights through data visualization. Built with a focus on performance and scalability, it offers a centralized hub for managing students, faculty, and institutional records.
 
