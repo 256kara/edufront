@@ -153,7 +153,6 @@ const Messages = () => {
           mb={1}
           sx={{
             fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" },
-            color: colors.blueAccent[300],
           }}
         >
           Messages
@@ -163,7 +162,6 @@ const Messages = () => {
           color="text.secondary"
           sx={{
             fontSize: { xs: "0.9rem", sm: "1rem", md: "1.1rem" },
-            color: colors.blueAccent[300],
           }}
         >
           {isStudent
@@ -333,11 +331,12 @@ const Messages = () => {
                         borderRadius: 1,
                         mb: 0.5,
                         "&.Mui-selected": {
-                          color: colors.primary[500],
+                          // color: colors.primary[500],
                           backgroundColor:
-                            theme.palette.mode === "dark"
-                              ? colors.blueAccent[700]
-                              : colors.blueAccent[500],
+                            colors.primary[
+                              theme.palette.mode === "dark" ? 700 : 200
+                            ],
+                          color: colors.primary[500],
                           "&:hover": {
                             backgroundColor:
                               theme.palette.mode === "dark"
@@ -497,7 +496,7 @@ const Messages = () => {
                     variant="h4"
                     fontWeight="bold"
                     sx={{
-                      color: colors.blueAccent[300],
+                      color: colors.primary[200],
                       fontSize: { xs: "1.2rem", sm: "1.5rem", md: "2rem" },
                       wordBreak: "break-word",
                     }}
@@ -507,7 +506,7 @@ const Messages = () => {
                 </Box>
                 <Typography
                   sx={{
-                    color: colors.blueAccent[300],
+                    color: colors.blueAccent[100],
                     mb: 2,
                     fontSize: { xs: "0.8rem", sm: "0.9rem" },
                   }}
@@ -524,7 +523,7 @@ const Messages = () => {
                 <Typography
                   whiteSpace="pre-wrap"
                   sx={{
-                    color: colors.blueAccent[300],
+                    color: colors.blueAccent[200],
                     fontSize: { xs: "0.9rem", sm: "1rem" },
                     lineHeight: 1.6,
                   }}

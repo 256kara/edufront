@@ -227,11 +227,10 @@ export default function Login({ isMobile, onLogin }) {
         response?.data?.accessToken ||
         response?.data?.data?.token;
 
-      if (!token) {
-        showErrorDialog(
-          "Login Error",
-          "Token missing from server response. Please try again.",
-        );
+      // return console.log("Login response data:", response.data.error, token);
+
+      if (response?.data?.error) {
+        showErrorDialog("Login Error", response.data.error);
         return;
       }
       onLogin?.(token);
@@ -240,6 +239,7 @@ export default function Login({ isMobile, onLogin }) {
 
       if (submitError.response?.data?.error) {
         errorMessage = submitError.response.data.error;
+        console.error("Login error details:", submitError.response.data.error);
       } else if (submitError.response?.data?.message) {
         errorMessage = submitError.response.data.message;
       } else if (submitError.message) {

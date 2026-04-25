@@ -95,18 +95,18 @@ const StudentDashboard = () => {
     axis: {
       ticks: {
         text: {
-          fill: colors.grey[100],
+          fill: colors.greenAccent[600],
         },
       },
       legend: {
         text: {
-          fill: colors.grey[100],
+          fill: colors.greenAccent[400],
         },
       },
     },
     grid: {
       line: {
-        stroke: colors.grey[700],
+        stroke: colors.grey[400],
       },
     },
   };
@@ -115,7 +115,7 @@ const StudentDashboard = () => {
     ...lineTheme,
     legends: {
       text: {
-        fill: colors.grey[100],
+        fill: colors.blueAccent[600],
       },
     },
   };

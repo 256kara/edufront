@@ -304,7 +304,13 @@ const Students = () => {
 
       {/* dialog */}
 
-      <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
+      <Dialog
+        disableEscapeKeyDown
+        open={open}
+        onClose={handleClose}
+        fullWidth
+        maxWidth="sm"
+      >
         <DialogTitle>Fill Student Data</DialogTitle>
         {error && (
           <Box>

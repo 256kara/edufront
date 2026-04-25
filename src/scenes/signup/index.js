@@ -61,7 +61,7 @@ export default function Signup({ isMobile }) {
 
   const [isPayment, setIsPayment] = useState(false);
   useEffect(() => {
-    setIsPayment(false);
+    setIsPayment(false); // Set to true to enable payment fields
   }, []);
   const textFieldSx = {
     input: {
@@ -178,7 +178,7 @@ export default function Signup({ isMobile }) {
 
     try {
       const { confirmPassword, ...data } = formValues;
-      // Demo payment: just log, don't process
+      // Demo payment: just log, no processing
       console.log("Payment details (demo):", {
         cardNumber: data.cardNumber,
         expiry: data.expiry,
@@ -186,7 +186,11 @@ export default function Signup({ isMobile }) {
         nameOnCard: data.nameOnCard,
       });
 
-      const response = await apiRequest.post("/auth/signup-admin", data);
+      const response = await apiRequest.post(
+        "/api/auth/signup-super-admin",
+        data,
+      );
+
       if (response.data.message) {
         setErrorDialog({
           open: true,
@@ -386,7 +390,7 @@ export default function Signup({ isMobile }) {
               </Grid>
             </>
           )}
-
+          <Box>{isFormValid ? "" : " All fields are required"}</Box>
           <Box mt={3} display="flex" justifyContent="center">
             <Button
               type="submit"

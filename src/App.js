@@ -139,7 +139,10 @@ function App() {
                       {isLoading ? (
                         "Loading user..."
                       ) : (
-                        <>Welcome, {user ? capusername(user.name) : "Admin"}</>
+                        <>
+                          Welcome, {user ? capusername(user.name) : "Admin"}{" "}
+                          {user ? user.school : "empty school"}
+                        </>
                       )}
                     </Typography>
                     <Typography

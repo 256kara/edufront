@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useContext } from "react";
 import { apiRequest } from "../api";
 import { AuthContext } from "../context/AuthContext";
+import { saveAs } from "file-saver";
 import {
   Box,
   Typography,
@@ -67,6 +68,7 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
         `http://localhost:5000/api/admin/delete-student/${id}`,
       );
       setStudents(students.filter((student) => student._id !== id));
+      fetchStudents(); // Refresh the list after deletion
     } catch (error) {
       console.error("Failed to delete student:", error);
     }
@@ -85,11 +87,17 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
 
   const handleSaveProfile = async () => {
     try {
-      // Update student data via API
-      await apiRequest.put(
-        `http://localhost:5000/api/admin/update-student/${selectedStudent.userId}`,
+      const response = await apiRequest.put(
+        `http://localhost:5000/api/admin/update-student/${selectedStudent.id}`,
         editedStudent,
       );
+
+      fetchStudents(); // Refresh
+
+      if (!response.data.message) {
+        setError("Failed to update student. Please try again.");
+        return;
+      }
 
       // Update local state
       setStudents(
@@ -152,7 +160,9 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
 
     XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
 
-    XLSX.writeFile(workbook, "students.xlsx");
+    const wbout = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const blob = new Blob([wbout], { type: "application/octet-stream" });
+    saveAs(blob, "students.xlsx");
   }, [students]);
 
   //   export run once
@@ -164,6 +174,13 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
   }, [isexport, exportExcel]);
 
   const columns = [
+    {
+      field: "id",
+      headerName: "ID",
+      minWidth: isMobile ? 80 : 100,
+      flex: isMobile ? 0.8 : 1,
+      hide: isMobile, // Hide admission on mobile
+    },
     {
       field: "admissionNumber",
       headerName: "Admission",
@@ -633,7 +650,7 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
                   <Divider sx={{ mb: 2 }} />
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
+                {/* <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
                     label="Phone Number"
@@ -646,7 +663,7 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
                     InputProps={{ readOnly: !editMode }}
                     variant={editMode ? "outlined" : "filled"}
                   />
-                </Grid>
+                </Grid> */}
 
                 <Grid item xs={12} sm={6}>
                   <TextField
@@ -666,14 +683,14 @@ function StudentsTable({ search, classFilter, isexport, refresh }) {
                 <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
-                    label="Status"
+                    label="Health Status"
                     value={
                       editMode
-                        ? editedStudent.status || ""
-                        : selectedStudent.status || ""
+                        ? editedStudent.healthStatus || ""
+                        : selectedStudent.healthStatus || ""
                     }
                     onChange={(e) =>
-                      handleInputChange("status", e.target.value)
+                      handleInputChange("healthStatus", e.target.value)
                     }
                     InputProps={{ readOnly: !editMode }}
                     variant={editMode ? "outlined" : "filled"}
