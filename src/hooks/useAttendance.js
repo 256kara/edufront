@@ -17,7 +17,7 @@ const useAttendance = (user) => {
 
     try {
       const res = await apiRequest.get(
-        `http://localhost:5000/api/admin/students/${user.school_name}?class=${selectedClass}&page=1&limit=1000`,
+        `/api/admin/students/${user.school_name}?class=${selectedClass}&page=1&limit=1000`,
       );
       setStudents(res.data.students || []);
     } catch (err) {
@@ -30,7 +30,7 @@ const useAttendance = (user) => {
 
     try {
       const res = await apiRequest.get(
-        `http://localhost:5000/api/admin/attendance/${user.school_name}?date=${selectedDate}&class=${selectedClass}`,
+        `/api/admin/attendance/${user.school_name}?date=${selectedDate}&class=${selectedClass}`,
       );
       setAttendanceRecords(res.data.attendance || []);
     } catch (err) {
@@ -100,7 +100,7 @@ const useAttendance = (user) => {
         }),
       );
 
-      await apiRequest.post("http://localhost:5000/api/admin/attendance", {
+      await apiRequest.post("/api/admin/attendance", {
         attendance: attendanceArray,
       });
 

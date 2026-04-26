@@ -65,7 +65,7 @@ const Assignments = () => {
     try {
       if (!user?.school_id) return;
 
-      let url = `http://localhost:5000/api/assignments/get-assignments/${user.school_id}`;
+      let url = `/api/assignments/get-assignments/${user.school_id}`;
       const params = new URLSearchParams();
 
       if (search) params.append("search", search);
@@ -176,15 +176,12 @@ const Assignments = () => {
 
       if (editingId) {
         // Update
-        await apiRequest.put(
-          `http://localhost:5000/api/assignments/${editingId}`,
-          payload,
-        );
+        await apiRequest.put(`/api/assignments/${editingId}`, payload);
         setSuccess("Assignment updated successfully!");
       } else {
         // Create
         await apiRequest.post(
-          `http://localhost:5000/api/assignments/create-assignment/${user.school_id}`,
+          `api/assignments/create-assignment/${user.school_id}`,
           payload,
         );
         setSuccess("Assignment created successfully!");
@@ -215,7 +212,7 @@ const Assignments = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this assignment?")) {
       try {
-        await apiRequest.delete(`http://localhost:5000/api/assignments/${id}`);
+        await apiRequest.delete(`/api/assignments/${id}`);
         setSuccess("Assignment deleted successfully!");
         fetchAssignments();
       } catch (err) {

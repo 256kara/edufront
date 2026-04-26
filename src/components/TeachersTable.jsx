@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useContext } from "react";
 // import { apiRequest } from "../api";
 import { AuthContext } from "../context/AuthContext";
+import { apiRequest } from "../api";
 import {
   Box,
   Typography,
@@ -45,38 +46,15 @@ function TeachersTable({ search, classFilter, isexport, refresh }) {
 
   const fetchTeachers = useCallback(async () => {
     if (!user?.school_name) return;
-    // Mock data for now - replace with API call
-    const mockTeachers = [
-      {
-        _id: "1",
-        userId: "t1",
-        name: "John Smith",
-        email: "john.smith@school.com",
-        phone: "+256700000001",
-        gender: "male",
-        subject: "Mathematics",
-        qualification: "MSc Mathematics",
-        experience: "5 years",
-        address: "123 Teacher St, Kampala",
-        status: "active",
-        role: "teacher",
-      },
-      {
-        _id: "2",
-        userId: "t2",
-        name: "Jane Doe",
-        email: "jane.doe@school.com",
-        phone: "+256700000002",
-        gender: "female",
-        subject: "English",
-        qualification: "BA English Literature",
-        experience: "3 years",
-        address: "456 Educator Ave, Entebbe",
-        status: "active",
-        role: "admin",
-      },
-    ];
-    setTeachers(mockTeachers);
+    try {
+      const response = await apiRequest.get(
+        `http://localhost:5000/api/admin/teachers/${user.school_name}`,
+      );
+      setTeachers(response.data.teachers || []);
+    } catch (error) {
+      console.error("Failed to fetch teachers:", error);
+      setTeachers([]);
+    }
   }, [user?.school_name]);
 
   useEffect(() => {
@@ -85,7 +63,7 @@ function TeachersTable({ search, classFilter, isexport, refresh }) {
 
   const deleteTeacher = async (id) => {
     try {
-      // Mock delete - replace with API call
+      await apiRequest.delete(`/api/admin/delete-teacher/${id}`);
       setTeachers(teachers.filter((teacher) => teacher._id !== id));
     } catch (error) {
       console.error("Failed to delete teacher:", error);
@@ -105,10 +83,24 @@ function TeachersTable({ search, classFilter, isexport, refresh }) {
 
   const handleSaveProfile = async () => {
     try {
-      // Mock update - replace with API call
+      const dataToSave = { ...editedTeacher };
+      // Convert subject string back to array
+      if (dataToSave.subject) {
+        dataToSave.subjects = dataToSave.subject
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean);
+        delete dataToSave.subject;
+      }
+      await apiRequest.put(
+        `/api/admin/update-teacher/${selectedTeacher._id}`,
+        dataToSave,
+      );
       setTeachers(
         teachers.map((teacher) =>
-          teacher._id === selectedTeacher._id ? editedTeacher : teacher,
+          teacher._id === selectedTeacher._id
+            ? { ...teacher, ...dataToSave }
+            : teacher,
         ),
       );
       setEditMode(false);
@@ -148,7 +140,9 @@ function TeachersTable({ search, classFilter, isexport, refresh }) {
       EMAIL: teacher.email || "",
       PHONE: teacher.phone || "",
       GENDER: capusername(teacher.gender),
-      SUBJECT: capusername(teacher.subject),
+      SUBJECT: capusername(
+        teacher.subjects?.join(", ") || teacher.subject || "",
+      ),
       QUALIFICATION: teacher.qualification || "",
       EXPERIENCE: teacher.experience || "",
       ADDRESS: teacher.address || "",
@@ -285,7 +279,7 @@ function TeachersTable({ search, classFilter, isexport, refresh }) {
       email: teacher.email,
       phone: teacher.phone,
       gender: capusername(teacher.gender),
-      subject: capusername(teacher.subject),
+      subject: capusername(teacher.subjects?.[0] || ""),
       qualification: teacher.qualification,
       experience: teacher.experience,
       status: capusername(teacher.status),
@@ -524,7 +518,9 @@ function TeachersTable({ search, classFilter, isexport, refresh }) {
                     value={
                       editMode
                         ? editedTeacher.subject || ""
-                        : selectedTeacher.subject || ""
+                        : selectedTeacher.subjects?.join(", ") ||
+                          selectedTeacher.subject ||
+                          ""
                     }
                     onChange={(e) =>
                       handleInputChange("subject", e.target.value)

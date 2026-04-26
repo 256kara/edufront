@@ -3,17 +3,17 @@
   "name": "Edupulse - School Management System",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "edulogo.png",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "edulogo.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "edulogo.png",
       "type": "image/png",
       "sizes": "512x512"
     }

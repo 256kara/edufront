@@ -323,7 +323,7 @@ const Attendance = () => {
       {!selectedClass && (
         <Card
           sx={{
-            backgroundColor: colors.primary[400],
+            backgroundColor: colors.primary[500],
             p: 4,
             textAlign: "center",
           }}
