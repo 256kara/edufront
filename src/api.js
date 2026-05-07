@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const AUTH_TOKEN_KEY = "edupulse_token";
 // const API_BASE_URL = "http://localhost:5000";
-const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:5000/";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://eduback-ixz9.onrender.com";
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
